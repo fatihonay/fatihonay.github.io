@@ -1,4 +1,23 @@
+body {
+  background-image: url('your-image-url.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center center;
+  position: relative; /* This is needed for the pseudo-element */
+}
 
+/* Pseudo-element for the opaque overlay */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7); /* White, 70% opaque */
+  z-index: -1; /* Pushes the overlay behind the content */
+}
 :root {
   --primary: #222;
   --secondary: #666;
