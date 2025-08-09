@@ -47,7 +47,10 @@
   align-items: center;
 
   /* Add gradient background: from blue to lighter blue */
-  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  background:
+  radial-gradient(circle at top left, rgba(255,255,255,0.15), transparent),
+  linear-gradient(135deg, #1e3a8a, #3b82f6);
+
   /* optional: fallback color */
   background-color: #1e3a8a;
   color: white; /* Make text white for contrast */
