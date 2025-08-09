@@ -54,6 +54,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
+            pointer-events: none; /* allow clicks to pass through */
             opacity: 0.2;
         }
 
@@ -385,19 +386,20 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero">
-        <canvas class="hero-canvas"></canvas>
-        <div class="container">
-            <div class="hero-content">
-                <img src="Foto_pp.png" alt="Fatih Onay" class="profile-image">
-                <h1>Fatih Onay</h1>
-                <p class="subtitle">Computational Neuroscientist & Researcher</p>
-                <p class="description">
-                    Passionate about understanding brain dynamics associated with motor and cognitive functions.
-                </p>
-            </div>
+<section id="home" class="hero">
+    <canvas class="hero-canvas"></canvas>
+    <div class="container">
+        <div class="hero-content">
+            <img src="Foto_pp.png" alt="Fatih Onay" class="profile-image">
+            <h1>Fatih Onay</h1>
+            <p class="subtitle">Computational Neuroscientist & Researcher</p>
+            <p class="description">
+                Passionate about understanding brain dynamics associated with motor and cognitive functions.
+            </p>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <!-- About Section -->
     <section id="about" class="section">
