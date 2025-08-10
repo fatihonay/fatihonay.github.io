@@ -211,7 +211,14 @@
             left: 50%;
             transform: translateX(-50%);
             border-radius: 2px;
+            box-shadow: 0 0 10px var(--accent); /* Subtle glow */
+            animation: pulse 2s ease-in-out infinite;
         }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 10px var(--accent); }
+            50% { box-shadow: 0 0 20px var(--accent); }
+}
 
         /* Cards */
         .cards {
