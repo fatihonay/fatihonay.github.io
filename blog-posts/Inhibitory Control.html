@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Awesome Blog Post</title>
+    <!-- Use the Inter font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN for easy styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-gray-900 tracking-tight">Brain Storm Series</a>
+            <nav class="ml-auto">
+                <a href= "../index.html"class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">Back to the main page</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="container mx-auto px-4 py-12 lg:py-24 max-w-4xl">
+        <article class="bg-white rounded-xl shadow-xl overflow-hidden">
+            <!-- Featured Image -->
+            <div class="w-full h-64 lg:h-96">
+                <img
+                    src="https://placehold.co/1200x600/E5E7EB/4B5563?text=Featured+Image+Goes+Here"
+                    alt="Placeholder for a featured image"
+                    class="w-full h-full object-cover"
+                />
+            </div>
+
+            <!-- Article Details & Title -->
+            <div class="p-6 sm:p-8 lg:p-12">
+                <div class="flex items-center text-gray-500 text-sm mb-4">
+                    <span class="mr-4">By Fatih Onay</span>
+                    <span class="mr-4">|</span>
+                    <time datetime="2024-08-12">August 12, 2025</time>
+                    <span class="mr-4">|</span>
+                    <span>5 min read</span>
+                </div>
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
+                    This is the Title of My Awesome Blog Post
+                </h1>
+
+                <!-- Blog Post Content -->
+                <div class="prose max-w-none text-gray-700 leading-relaxed space-y-6">
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.
+                    </p>
+                    <p>
+                        Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula non mi ornare egestas.
+                    </p>
+                    <blockquote>
+                        <p>
+                            "This is an example of a blockquote. It is a great way to highlight important text or quotes from other sources."
+                        </p>
+                    </blockquote>
+                    <p>
+                        Aliquam erat volutpat. Nam dui ligula, fringilla a, euismod sodales, sollicitudin vel, wisi. Morbi auctor lorem non justo. Nam lacus libero, pretium at, lobortis vitae, ultricies et, magna. Donec aliquet semper leo. Maecenas vel elit.
+                    </p>
+                    <p>
+                        Donec quis nunc. Sed vel lorem. Praesent a tortor quis dolor egestas facilisis. Ut non enim at est semper consectetur. Duis vitae massa sit amet odio accumsan auctor. Vivamus eleifend.
+                    </p>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 text-gray-300 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 Fatih Onay. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
