@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Principal Component Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+    blockquote {
+    /* Set the font for a modern, clean look */
+    font-family: sans-serif;
+    line-height: 1.6;
+    color: #333; /* Dark gray for good readability */
+
+    /* The modern, light blue border */
+    border-left: 5px solid #007bff; /* A nice, bright blue */
+
+    /* Add some space inside and outside the box */
+    padding: 6rem 15rem;
+    margin: 5rem 0;
+
+    /* Optional: A very subtle background color */
+    background-color: #f8f9fa;
+}
+
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-gray-900 tracking-tight">Brain Storm Series</a>
+            <nav class="ml-auto">
+                <a href= "../index.html"class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">Back to the main page</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-12 lg:py-24 max-w-4xl">
+        <article class="bg-white rounded-xl shadow-xl overflow-hidden">
+            <div class="w-full h-[950px] lg:h-[800px] xl:h-[750px]">
+                <img
+                    src="PCA.webp"
+                    alt="An infographic on Principal Component Analysis (PCA)"
+                    class="w-full h-full object-cover"
+                />
+            </div>
+
+            <div class="p-6 sm:p-8 lg:p-12">
+                <div class="flex items-center text-gray-500 text-sm mb-4">
+                    <span class="mr-4">By Fatih Onay</span>
+                    <span class="mr-4">|</span>
+                    <time datetime="2025-08-29">August 29, 2025</time>
+                    <span class="mr-4">|</span>
+                    <span>6 min read</span>
+                </div>
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
+                    A Simple Guide to Principal Component Analysis
+                </h1>
+
+                <div class="prose max-w-none text-gray-700 leading-relaxed space-y-6">
+                    <p>
+                        By multiplying our original data matrix X by this transformation matrix P, we get a new, transformed dataset Y that is projected onto our new, more meaningful axes.
+                    </p>
+
+                    <p>
+                        This new dataset Y has the same number of dimensions as the original, but the data is now aligned with the principal components. By selecting only the first few principal components (the ones with the largest eigenvalues), we can dramatically reduce the dimensionality of our data while losing minimal information.
+                    </p>
+
+                        In summary, PCA is an elegant way to simplify complex datasets. It's a powerful tool for data scientists, helping us to visualize high-dimensional data, reduce noise, and improve the performance of machine learning models.
+                    </p>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-300 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 Fatih Onay. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+</body>
+</html>
