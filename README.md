@@ -27,7 +27,7 @@ To preview the site, open `index.html` in a browser.
 2. Add an entry at the **top** of the `NOTES` list in `assets/site.js` (date, title, summary, tags).
    It then appears on the Lab Notes page and in "Latest Lab Notes" on the Home page.
 3. For an interactive demo, copy the `<div class="sim">` block and the `<script>` from
-   `notes/2026-10-22-synchrony.html` and change the model.
+   `notes/2026-10-15-synchrony.html` and change the model.
 4. Publish:
    ```bash
    git add -A && git commit -m "New lab note" && git push

@@ -19,8 +19,8 @@ const SITE = {
 // The post file goes in the notes/ folder (copy notes/_template.html to start).
 const NOTES = [
   {
-    href: "notes/2026-10-22-synchrony.html",
-    date: "22 Oct 2026",
+    href: "notes/2026-10-15-synchrony.html",
+    date: "15 Oct 2026",
     title: "How do neurons fall into rhythm?",
     summary: "Play with 80 coupled oscillators and watch a brain-like rhythm appear out of noise.",
     tags: ["Simulation", "Oscillations"],
