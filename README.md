@@ -14,11 +14,24 @@ A plain HTML/CSS site with no build step. It works on GitHub Pages, Netlify, Clo
 | `teaching.html` | Courses and supervision |
 | `gallery.html` | Photos |
 | `contact.html` | Email, office, map |
+| `notes.html` + `notes/` | Lab Notes: weekly ideas and simulations (see below) |
 | `assets/style.css` | Colours and fonts (the variables at the top) |
 | `assets/img/` | Your photos (`profile.jpg`, gallery images) |
-| `assets/cv.pdf` | Your CV, linked from Home and Bio |
+| `assets/img/cv.pdf` | Your CV, linked from Home and Bio |
 
 To preview the site, open `index.html` in a browser.
+
+## Adding a weekly Lab Note
+
+1. Copy `notes/_template.html` to a new file, e.g. `notes/2026-10-29-my-topic.html`, and write the note.
+2. Add an entry at the **top** of the `NOTES` list in `assets/site.js` (date, title, summary, tags).
+   It then appears on the Lab Notes page and in "Latest Lab Notes" on the Home page.
+3. For an interactive demo, copy the `<div class="sim">` block and the `<script>` from
+   `notes/2026-10-22-synchrony.html` and change the model.
+4. Publish:
+   ```bash
+   git add -A && git commit -m "New lab note" && git push
+   ```
 
 ## Publish free on GitHub Pages
 

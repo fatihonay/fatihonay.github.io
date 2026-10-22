@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How do neurons fall into rhythm? · Fatih Onay</title>
+  <meta name="description" content="An interactive Kuramoto model: watch a brain-like rhythm emerge from coupled oscillators.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <div id="site-header"></div>
+  <script src="../assets/site.js" data-root="../"></script>
+
+  <main class="container">
+    <article class="post">
+      <p><a href="../notes.html">← All Lab Notes</a></p>
+      <h1>How do neurons fall into rhythm?</h1>
+      <p class="post-meta">22 October 2026 · Simulation · Oscillations</p>
+
+      <p>
+        When you close your eyes and relax, an EEG electrode at the back of your
+        head picks up a strong wave of about 10 cycles per second — the
+        <strong>alpha rhythm</strong>. But no single neuron "plays" that rhythm.
+        An electrode hears millions of cells at once, and their signals only add
+        up to a clear wave if many of them oscillate <em>together</em>.
+      </p>
+      <p>
+        So how does a crowd of slightly different oscillators decide to march in
+        step? A beautifully simple model by Yoshiki Kuramoto (1975) gives an answer:
+        each oscillator gets a gentle pull towards the group's average phase.
+        Below a critical pull strength, nothing happens. Above it, a rhythm
+        suddenly appears out of noise.
+      </p>
+
+      <div class="sim" id="sim">
+        <div class="sim-grid">
+          <div>
+            <canvas id="ring" height="260" aria-label="Oscillators moving around a circle"></canvas>
+            <p class="sim-caption">Each dot is an oscillator moving around the circle. Colour = its natural speed. The arrow is the group average.</p>
+          </div>
+          <div>
+            <canvas id="trace" height="260" aria-label="Summed signal over time"></canvas>
+            <p class="sim-caption">Glowing line: the summed "EEG" signal. Thin line: synchrony <em>r</em> (0 = chaos, 1 = perfect unison).</p>
+          </div>
+        </div>
+        <div class="controls">
+          <label>Coupling <em>K</em>
+            <input type="range" id="k" min="0" max="6" step="0.1" value="0.5">
+            <span class="readout" id="kval">0.5</span>
+          </label>
+          <label>Noise
+            <input type="range" id="noise" min="0" max="2" step="0.1" value="0.2">
+          </label>
+          <span>Synchrony <span class="readout" id="rval">0.00</span></span>
+          <button id="scramble">Scramble</button>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Try this:</strong> slowly drag <em>K</em> from 0 to 6. Around
+        <em>K ≈ 2.5</em> the dots start to clump and the summed signal grows from
+        a fuzzy line into a clear wave. Then raise the noise and watch the rhythm
+        break up again.
+      </div>
+
+      <h2>The model in one line</h2>
+      <p>
+        Each oscillator <em>i</em> has a phase θ<sub>i</sub> and its own natural
+        frequency ω<sub>i</sub>. The group's average is summarised by
+        <em>r</em> (how aligned everyone is) and ψ (where the crowd is pointing):
+      </p>
+      <pre><code>dθᵢ/dt = ωᵢ + K · r · sin(ψ − θᵢ) + noise</code></pre>
+      <p>
+        The second term pulls each oscillator towards the crowd — and the better
+        the crowd is aligned (larger <em>r</em>), the stronger the pull. That
+        feedback loop is why synchrony switches on so abruptly.
+      </p>
+
+      <h2>Run it yourself in Python</h2>
+<pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+N, K, dt, steps = 200, 3.0, 0.01, 4000
+omega = np.random.normal(2*np.pi, 1.5, N)     # natural frequencies
+theta = np.random.uniform(0, 2*np.pi, N)      # random start
+
+r_hist, eeg = [], []
+for _ in range(steps):
+    z = np.exp(1j*theta).mean()               # complex order parameter
+    r, psi = np.abs(z), np.angle(z)
+    theta += dt*(omega + K*r*np.sin(psi - theta))
+    r_hist.append(r)
+    eeg.append(np.cos(theta).mean())          # what an electrode would "hear"
+
+plt.plot(eeg, lw=0.8, label="summed signal")
+plt.plot(r_hist, lw=2, label="synchrony r")
+plt.legend(); plt.show()</code></pre>
+
+      <h2>Why this matters</h2>
+      <p>
+        Changes in neural synchrony show up in many conditions — for example,
+        altered rhythms and connectivity in Parkinson's disease, which is a large
+        part of my own <a href="../research.html">research</a>. Simple models like
+        Kuramoto's help us reason about what an EEG change might mean: are cells
+        firing differently, or are they just less in step with each other?
+      </p>
+      <p class="post-meta" style="margin-top:24px">
+        Note: the simulation runs about 10× slower than real alpha so your eyes can follow it.
+      </p>
+    </article>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+  (() => {
+    const N = 80;
+    const TWO_PI = 2 * Math.PI;
+    const ring = document.getElementById("ring");
+    const trace = document.getElementById("trace");
+    const kInput = document.getElementById("k");
+    const noiseInput = document.getElementById("noise");
+    const kval = document.getElementById("kval");
+    const rval = document.getElementById("rval");
+
+    // Gaussian random numbers (Box–Muller)
+    const randn = () => Math.sqrt(-2 * Math.log(1 - Math.random())) * Math.cos(TWO_PI * Math.random());
+
+    const omega = Array.from({ length: N }, () => TWO_PI * 1.0 + 1.57 * randn());
+    const radius = Array.from({ length: N }, () => 0.78 + 0.18 * Math.random());
+    let theta = [];
+    const scramble = () => { theta = Array.from({ length: N }, () => TWO_PI * Math.random()); };
+    scramble();
+
+    // Colour by natural frequency: slow = violet, then pink, fast = gold
+    const colourFor = (w) => {
+      const x = Math.max(0, Math.min(1, (w - TWO_PI + 3) / 6));
+      return `hsl(${(250 + x * 160) % 360}, 90%, 66%)`;
+    };
+    const colours = omega.map(colourFor);
+
+    const HISTORY = 400;
+    const eeg = new Array(HISTORY).fill(0);
+    const rHist = new Array(HISTORY).fill(0);
+    let r = 0, psi = 0;
+
+    function fit(canvas) {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.clientWidth;
+      canvas.dataset.h ||= canvas.getAttribute("height");
+      const h = Number(canvas.dataset.h);
+      if (canvas.width !== Math.round(w * dpr)) {
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        canvas.style.height = h + "px";
+      }
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { ctx, w, h };
+    }
+
+    function step(dt) {
+      const K = Number(kInput.value);
+      const noise = Number(noiseInput.value);
+      let sx = 0, sy = 0;
+      for (const t of theta) { sx += Math.cos(t); sy += Math.sin(t); }
+      r = Math.hypot(sx, sy) / N;
+      psi = Math.atan2(sy, sx);
+      for (let i = 0; i < N; i++) {
+        theta[i] += dt * (omega[i] + K * r * Math.sin(psi - theta[i])) + noise * Math.sqrt(dt) * randn();
+      }
+    }
+
+    function drawRing() {
+      const { ctx, w, h } = fit(ring);
+      ctx.clearRect(0, 0, w, h);
+      const cx = w / 2, cy = h / 2, R = Math.min(w, h) / 2 - 14;
+
+      ctx.strokeStyle = "rgba(255,255,255,0.12)";
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, TWO_PI); ctx.stroke();
+
+      ctx.globalCompositeOperation = "lighter";
+      for (let i = 0; i < N; i++) {
+        const x = cx + R * radius[i] * Math.cos(theta[i]);
+        const y = cy - R * radius[i] * Math.sin(theta[i]);
+        const g = ctx.createRadialGradient(x, y, 0, x, y, 9);
+        g.addColorStop(0, colours[i]);
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(x, y, 9, 0, TWO_PI); ctx.fill();
+      }
+      ctx.globalCompositeOperation = "source-over";
+
+      // Mean-field arrow
+      const ax = cx + R * r * Math.cos(psi), ay = cy - R * r * Math.sin(psi);
+      const grad = ctx.createLinearGradient(cx, cy, ax, ay);
+      grad.addColorStop(0, "#7c5cff");
+      grad.addColorStop(1, "#ff8fab");
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 3;
+      ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(ax, ay); ctx.stroke();
+      ctx.fillStyle = "#ff8fab";
+      ctx.beginPath(); ctx.arc(ax, ay, 4, 0, TWO_PI); ctx.fill();
+    }
+
+    function drawTrace() {
+      const { ctx, w, h } = fit(trace);
+      ctx.clearRect(0, 0, w, h);
+      const mid = h * 0.45, amp = h * 0.38;
+
+      ctx.strokeStyle = "rgba(255,255,255,0.08)";
+      ctx.beginPath(); ctx.moveTo(0, mid); ctx.lineTo(w, mid); ctx.stroke();
+
+      // Summed signal with glow
+      const grad = ctx.createLinearGradient(0, 0, w, 0);
+      grad.addColorStop(0, "#5b8cff");
+      grad.addColorStop(0.5, "#c86bff");
+      grad.addColorStop(1, "#ff7a8a");
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 2.2;
+      ctx.shadowColor = "#c86bff";
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      eeg.forEach((v, i) => {
+        const x = (i / (HISTORY - 1)) * w, y = mid - v * amp;
+        i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      });
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Synchrony r along the bottom
+      ctx.strokeStyle = "#5ee6c8";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      rHist.forEach((v, i) => {
+        const x = (i / (HISTORY - 1)) * w, y = h - 8 - v * (h * 0.25);
+        i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      });
+      ctx.stroke();
+    }
+
+    let last = performance.now();
+    function frame(now) {
+      const dt = Math.max(0, Math.min((now - last) / 1000, 0.05));
+      last = now;
+      for (let s = 0; s < 4; s++) step(dt / 4);
+
+      let mean = 0;
+      for (const t of theta) mean += Math.cos(t);
+      eeg.push(mean / N); eeg.shift();
+      rHist.push(r); rHist.shift();
+
+      drawRing();
+      drawTrace();
+      rval.textContent = r.toFixed(2);
+      requestAnimationFrame(frame);
+    }
+
+    kInput.addEventListener("input", () => { kval.textContent = Number(kInput.value).toFixed(1); });
+    document.getElementById("scramble").addEventListener("click", scramble);
+    requestAnimationFrame(frame);
+  })();
+  </script>
+</body>
+</html>
