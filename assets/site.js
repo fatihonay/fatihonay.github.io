@@ -9,6 +9,7 @@ const SITE = {
     { href: "research.html", label: "Research" },
     { href: "publications.html", label: "Publications" },
     { href: "notes.html", label: "Lab Notes" },
+    { href: "atlas.html", label: "Brain Atlas" },
     { href: "teaching.html", label: "Teaching" },
     { href: "gallery.html", label: "Gallery" },
     { href: "contact.html", label: "Contact" },

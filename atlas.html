@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Brain Atlas · Fatih Onay</title>
+  <meta name="description" content="Interactive 3D brain atlas with the 10-20 EEG electrodes: click a region or an electrode to see what lies beneath and what it does.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div id="site-header"></div>
+  <script src="assets/site.js"></script>
+
+  <main class="container atlas-page">
+    <h1>Interactive Brain Atlas</h1>
+    <p class="lead">
+      Explore the human brain in 3D and see which brain regions lie beneath each EEG
+      electrode. Click anywhere on the brain, pick an electrode on the head map, or
+      choose a region from the list.
+    </p>
+
+    <div class="atlas-layout">
+      <section>
+        <div class="viewer-card">
+          <div class="viewer-wrap"><canvas id="gl" aria-label="3D brain viewer"></canvas></div>
+          <div class="viewer-tools">
+            <span class="seg" role="group" aria-label="View">
+              <button data-view="multi" class="on">Slices + 3D</button>
+              <button data-view="render">3D</button>
+              <button data-view="axial">Axial</button>
+              <button data-view="coronal">Coronal</button>
+              <button data-view="sagittal">Sagittal</button>
+            </span>
+            <label>Atlas colours <input type="range" id="opacity" min="0" max="1" step="0.05" value="0.6"></label>
+            <label><input type="checkbox" id="showElectrodes" checked> Electrodes</label>
+          </div>
+          <p class="viewer-status" id="status">Loading brain…</p>
+        </div>
+        <div class="lobe-legend" id="legend"></div>
+      </section>
+
+      <aside>
+        <div class="side-card">
+          <p class="kicker">EEG 10-20 electrodes</p>
+          <svg class="headmap" id="headmap" viewBox="-125 -132 250 260" role="group" aria-label="Electrode head map, nose at the top">
+            <defs>
+              <linearGradient id="elGrad" x1="0" x2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#e5604a"/></linearGradient>
+            </defs>
+            <path class="head" d="M -14 -99 L 0 -118 L 14 -99"/>
+            <ellipse class="head" cx="-104" cy="0" rx="7" ry="20"/>
+            <ellipse class="head" cx="104" cy="0" rx="7" ry="20"/>
+            <circle class="head" cx="0" cy="0" r="100"/>
+          </svg>
+          <p class="coords" style="text-align:center;margin:0">Top view, nose at the top</p>
+        </div>
+
+        <div class="side-card">
+          <p class="kicker">Jump to a region</p>
+          <select id="regionSelect" aria-label="Choose a brain region">
+            <option value="">Choose a region…</option>
+          </select>
+        </div>
+
+        <div class="side-card info-body" id="info" aria-live="polite">
+          <p class="kicker">Selected</p>
+          <h3>Nothing yet</h3>
+          <p>Click on the brain or pick an electrode to see what lies there and what it does.</p>
+        </div>
+      </aside>
+    </div>
+
+    <h2>How to read this atlas</h2>
+    <p>
+      The brain is the <strong>MNI ICBM152</strong> template: an average of many adult MRI
+      scans, used as a common reference space in neuroimaging. Coloured regions come from
+      the <strong>CerebrA</strong> atlas, which divides each hemisphere into 51 anatomical
+      regions (cortical areas, deep structures and cerebellum). Colours group regions by lobe.
+    </p>
+    <p>
+      The electrodes follow the international <strong>10-20 system</strong>, the standard way
+      of placing EEG electrodes on the scalp. In the 3D view each electrode is shown where it
+      projects onto the cortex. For each electrode, the panel lists the regions within 1 cm of
+      that point. Keep in mind that EEG measures a blurred sum of activity from a much larger
+      area, so this is "what lies beneath", not "the only source of the signal".
+    </p>
+
+    <h2>Sources and credits</h2>
+    <ul class="credits">
+      <li><strong>Atlas:</strong> CerebrA, Manera A. L., Dadar M., Fonov V., Collins D. L. (2020).
+        <em>Scientific Data</em> 7, 237. <a href="https://doi.org/10.1038/s41597-020-0557-9">doi:10.1038/s41597-020-0557-9</a>.
+        Data: <a href="https://doi.org/10.12751/g-node.be5e62">doi:10.12751/g-node.be5e62</a>, CC0.</li>
+      <li><strong>Template:</strong> MNI ICBM152 2009c nonlinear symmetric (Fonov et al., 2011,
+        <a href="https://doi.org/10.1016/j.neuroimage.2010.07.033">NeuroImage</a>).
+        Copyright (C) 1993–2004 Louis Collins, McConnell Brain Imaging Centre, Montreal Neurological
+        Institute, McGill University. Permission to use, copy, modify, and distribute this software
+        and its documentation for any purpose and without fee is hereby granted, provided that the
+        above copyright notice appear in all copies. The authors and McGill University make no
+        representations about the suitability of this software for any purpose. It is provided
+        "as is" without express or implied warranty.</li>
+      <li><strong>Electrode positions:</strong> standard 10-20 locations on the MNI Colin27 head
+        from FieldTrip (Oostenveld &amp; Praamstra, 2001,
+        <a href="https://doi.org/10.1016/S1388-2457(00)00527-7">Clin. Neurophysiol.</a>), projected
+        onto the cortex in the spirit of Okamoto et al. (2004,
+        <a href="https://doi.org/10.1016/j.neuroimage.2003.08.026">NeuroImage</a>) and Koessler et al.
+        (2009, <a href="https://doi.org/10.1016/j.neuroimage.2009.02.006">NeuroImage</a>).</li>
+      <li><strong>Viewer:</strong> <a href="https://github.com/niivue/niivue">NiiVue</a> (BSD-2 licence).
+        Region and electrode descriptions are short summaries for teaching.</li>
+    </ul>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script type="module">
+    import { Niivue } from "https://cdn.jsdelivr.net/npm/@niivue/niivue@0.69.0/dist/index.js";
+
+    const ROOT = "assets/atlas/";
+    const [atlas, info] = await Promise.all([
+      fetch(ROOT + "atlas.json").then((r) => r.json()),
+      fetch(ROOT + "info.json").then((r) => r.json()),
+    ]);
+    const regions = atlas.regions;                 // id -> {name, hemi, lobe, rgb, mm}
+    const electrodes = atlas.electrodes;
+    const status = document.getElementById("status");
+    const infoEl = document.getElementById("info");
+    const hex = (rgb) => "#" + rgb.map((v) => v.toString(16).padStart(2, "0")).join("");
+
+    // ----- Viewer -----
+    const nv = new Niivue({
+      backColor: [0.07, 0.06, 0.13, 1],
+      crosshairColor: [1, 0.55, 0.6, 1],
+      crosshairWidth: 1,
+      show3Dcrosshair: true,
+      isColorbar: false,
+      dragAndDropEnabled: false,
+      multiplanarShowRender: 1,
+      multiplanarLayout: 2,
+      meshThicknessOn2D: 5,          // only show electrodes within 5 mm of a slice
+      renderOverlayBlend: 0,         // 3D view: plain brain surface; atlas colours are shown on the slices
+    });
+    await nv.attachToCanvas(document.getElementById("gl"));
+    await nv.loadVolumes([
+      { url: ROOT + "brain.nii.gz", colormap: "gray" },
+      { url: ROOT + "labels.nii.gz", opacity: 0.6 },
+    ]);
+
+    // Label colours: one entry per atlas value 0..max (0 = transparent background).
+    const maxId = Math.max(...Object.keys(regions).map(Number));
+    const lut = { R: [], G: [], B: [], A: [], I: [], labels: [] };
+    for (let i = 0; i <= maxId; i++) {
+      const r = regions[i];
+      const [cr, cg, cb] = r ? r.rgb : [0, 0, 0];
+      lut.R.push(cr); lut.G.push(cg); lut.B.push(cb); lut.A.push(r ? 255 : 0); lut.I.push(i);
+      lut.labels.push(r ? `${r.hemi} ${r.name}` : "");
+    }
+    nv.volumes[1].setColormapLabel(lut);
+    // Values at or below cal_min are transparent in 3D, so the empty space around the brain disappears.
+    nv.volumes[0].cal_min = 25;
+    nv.volumes[0].cal_max = 230;
+    nv.updateGLVolume();
+    nv.setSliceType(nv.sliceTypeMultiplanar);
+    nv.setRenderAzimuthElevation(120, 15);
+
+    // Electrodes as small spheres where they meet the cortex.
+    function electrodeConnectome(selected) {
+      const n = electrodes.length;
+      return {
+        name: "10-20", nodeColormap: "warm", nodeColormapNegative: "warm", nodeMinColor: 0, nodeMaxColor: 1,
+        nodeScale: 3, edgeColormap: "warm", edgeColormapNegative: "warm", edgeMin: 0, edgeMax: 1, edgeScale: 1,
+        showLegend: false,
+        nodes: {
+          names: electrodes.map((e) => e.name),
+          prefilled: [],
+          X: electrodes.map((e) => e.cortex[0]),
+          Y: electrodes.map((e) => e.cortex[1]),
+          Z: electrodes.map((e) => e.cortex[2]),
+          Color: electrodes.map((e) => (e.name === selected ? 1 : 0.35)),
+          Size: electrodes.map((e) => (e.name === selected ? 2.2 : 1.3)),
+        },
+        edges: new Array(n * n).fill(0),
+      };
+    }
+    let showElectrodes = true, selectedElectrode = null;
+    function refreshElectrodes() {
+      nv.meshes.slice().forEach((m) => nv.removeMesh(m));
+      if (showElectrodes) nv.loadConnectome(electrodeConnectome(selectedElectrode));
+      nv.drawScene();
+    }
+    refreshElectrodes();
+    status.textContent = "Drag to move the crosshair · drag on the 3D view to rotate · scroll to zoom.";
+
+    // ----- Info panel -----
+    function regionAt(mm) {
+      const v = nv.volumes[1];
+      const vox = v.mm2vox(mm);
+      return Math.round(v.getValue(vox[0], vox[1], vox[2]));
+    }
+    const fmt = (mm) => mm.map((v) => Math.round(v)).join(", ");
+
+    function showRegion(id, mm) {
+      const r = regions[id];
+      if (!r) {
+        infoEl.innerHTML = `<p class="kicker">Selected</p><h3>Outside the labelled brain</h3>
+          <p>This point is in white matter, between regions, or outside the brain.</p>
+          <p class="coords">MNI ${fmt(mm)} mm</p>`;
+        return;
+      }
+      infoEl.innerHTML = `<p class="kicker">Brain region</p>
+        <h3>${r.name}</h3>
+        <span class="chip" style="background:${hex(atlas.lobeColors[r.lobe])}">${r.lobe}</span>
+        <span class="chip" style="background:#6c6578">${r.hemi} hemisphere</span>
+        <p>${info.regions[r.name] || ""}</p>
+        <p class="coords">MNI ${fmt(mm)} mm</p>`;
+    }
+
+    function showElectrode(e) {
+      const under = e.regions.map((u) => {
+        const r = regions[u.id];
+        return `<li><button data-region="${u.id}">${r.hemi} ${r.name}</button><span class="pct">${u.pct}%</span>
+          <span class="bar"><span style="width:${u.pct}%"></span></span></li>`;
+      }).join("");
+      infoEl.innerHTML = `<p class="kicker">EEG electrode</p>
+        <h3>${e.name}${e.old ? ` <span style="font-weight:400;color:var(--muted)">(old name ${e.old})</span>` : ""}</h3>
+        <p>${info.electrodes[e.name] || ""}</p>
+        <p class="kicker" style="margin-top:12px">Cortex beneath it (within 1 cm)</p>
+        <ul class="under-list">${under}</ul>
+        <p class="coords">Scalp MNI ${fmt(e.scalp)} mm · cortex ${fmt(e.cortex)} mm</p>`;
+      infoEl.querySelectorAll("[data-region]").forEach((b) =>
+        b.addEventListener("click", () => goToRegion(Number(b.dataset.region))));
+    }
+
+    function moveTo(mm) {
+      nv.scene.crosshairPos = nv.mm2frac(mm);
+      nv.drawScene();
+    }
+
+    // Clicking in the viewer selects the region under the crosshair.
+    // (Moving the crosshair from code does not trigger this.)
+    nv.onLocationChange = (d) => {
+      const mm = Array.from(d.mm).slice(0, 3);
+      selectElectrode(null, false);
+      showRegion(regionAt(mm), mm);
+    };
+
+    function goToRegion(id) {
+      const r = regions[id];
+      selectElectrode(null, false);
+      moveTo(r.mm);
+      showRegion(id, r.mm);
+      document.getElementById("regionSelect").value = String(id);
+    }
+
+    // ----- Head map -----
+    const LAYOUT = {
+      Fp1: [-31, -95], Fpz: [0, -100], Fp2: [31, -95], F7: [-81, -59], F3: [-40, -50], Fz: [0, -50],
+      F4: [40, -50], F8: [81, -59], T7: [-100, 0], C3: [-50, 0], Cz: [0, 0], C4: [50, 0], T8: [100, 0],
+      P7: [-81, 59], P3: [-40, 50], Pz: [0, 50], P4: [40, 50], P8: [81, 59], O1: [-31, 95], Oz: [0, 100], O2: [31, 95],
+    };
+    const svg = document.getElementById("headmap");
+    const ns = "http://www.w3.org/2000/svg";
+    const dots = {};
+    electrodes.forEach((e) => {
+      const [x, y] = LAYOUT[e.name];
+      const g = document.createElementNS(ns, "g");
+      g.setAttribute("class", "el");
+      g.setAttribute("tabindex", "0");
+      g.setAttribute("role", "button");
+      g.setAttribute("aria-label", `Electrode ${e.name}`);
+      g.innerHTML = `<circle cx="${x}" cy="${y}" r="13"></circle><text x="${x}" y="${y}">${e.name}</text>`;
+      g.addEventListener("click", () => selectElectrode(e, true));
+      g.addEventListener("keydown", (ev) => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); selectElectrode(e, true); } });
+      svg.appendChild(g);
+      dots[e.name] = g;
+    });
+
+    function selectElectrode(e, move) {
+      const name = e ? e.name : null;
+      if (name === selectedElectrode && !move) return;
+      selectedElectrode = name;
+      Object.entries(dots).forEach(([n, g]) => g.classList.toggle("on", n === name));
+      if (showElectrodes) refreshElectrodes();
+      if (e && move) {
+        moveTo(e.cortex);
+        showElectrode(e);
+        document.getElementById("regionSelect").value = "";
+      }
+    }
+
+    // ----- Region list -----
+    const select = document.getElementById("regionSelect");
+    const byLobe = {};
+    Object.entries(regions).forEach(([id, r]) => (byLobe[r.lobe] ||= []).push([Number(id), r]));
+    Object.keys(atlas.lobeColors).forEach((lobe) => {
+      if (!byLobe[lobe]) return;
+      const og = document.createElement("optgroup");
+      og.label = lobe;
+      byLobe[lobe].sort((a, b) => (a[1].name + a[1].hemi).localeCompare(b[1].name + b[1].hemi))
+        .forEach(([id, r]) => og.appendChild(new Option(`${r.name} (${r.hemi === "Left" ? "L" : "R"})`, id)));
+      select.appendChild(og);
+    });
+    select.addEventListener("change", () => select.value && goToRegion(Number(select.value)));
+
+    // ----- Legend and controls -----
+    document.getElementById("legend").innerHTML = Object.entries(atlas.lobeColors)
+      .map(([lobe, c]) => `<span><i style="background:${hex(c)}"></i>${lobe}</span>`).join("");
+
+    const views = { multi: nv.sliceTypeMultiplanar, render: nv.sliceTypeRender, axial: nv.sliceTypeAxial,
+                    coronal: nv.sliceTypeCoronal, sagittal: nv.sliceTypeSagittal };
+    document.querySelectorAll("[data-view]").forEach((b) => b.addEventListener("click", () => {
+      nv.setSliceType(views[b.dataset.view]);
+      document.querySelectorAll("[data-view]").forEach((x) => x.classList.toggle("on", x === b));
+    }));
+    document.getElementById("opacity").addEventListener("input", (ev) => nv.setOpacity(1, Number(ev.target.value)));
+    document.getElementById("showElectrodes").addEventListener("change", (ev) => {
+      showElectrodes = ev.target.checked;
+      refreshElectrodes();
+    });
+
+    // Start on Cz, the top of the head.
+    selectElectrode(electrodes.find((e) => e.name === "Cz"), true);
+    window.__atlas = { nv };
+  </script>
+</body>
+</html>

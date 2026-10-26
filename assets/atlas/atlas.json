@@ -1,0 +1,2058 @@
+{
+ "regions": {
+  "1": {
+   "name": "Rostral Middle Frontal",
+   "hemi": "Right",
+   "lobe": "Frontal",
+   "mm": [
+    39.0,
+    43.0,
+    17.0
+   ],
+   "rgb": [
+    164,
+    142,
+    255
+   ]
+  },
+  "2": {
+   "name": "Vermal lobules VI-VII",
+   "hemi": "Right",
+   "lobe": "Cerebellum",
+   "mm": [
+    3.0,
+    -70.0,
+    -22.0
+   ],
+   "rgb": [
+    147,
+    187,
+    123
+   ]
+  },
+  "3": {
+   "name": "Inferior temporal",
+   "hemi": "Right",
+   "lobe": "Temporal",
+   "mm": [
+    48.0,
+    -24.0,
+    -28.0
+   ],
+   "rgb": [
+    209,
+    88,
+    67
+   ]
+  },
+  "4": {
+   "name": "Accumbens Area",
+   "hemi": "Right",
+   "lobe": "Deep structures",
+   "mm": [
+    9.0,
+    12.0,
+    -7.0
+   ],
+   "rgb": [
+    67,
+    97,
+    157
+   ]
+  },
+  "5": {
+   "name": "Inferior Lateral Ventricle",
+   "hemi": "Right",
+   "lobe": "Ventricles",
+   "mm": [
+    29.0,
+    -16.0,
+    -13.0
+   ],
+   "rgb": [
+    155,
+    155,
+    169
+   ]
+  },
+  "6": {
+   "name": "Pericalcarine",
+   "hemi": "Right",
+   "lobe": "Occipital",
+   "mm": [
+    11.0,
+    -83.0,
+    9.0
+   ],
+   "rgb": [
+    246,
+    210,
+    132
+   ]
+  },
+  "7": {
+   "name": "Lateral Orbitofrontal",
+   "hemi": "Right",
+   "lobe": "Frontal",
+   "mm": [
+    23.0,
+    36.0,
+    -20.0
+   ],
+   "rgb": [
+    99,
+    74,
+    205
+   ]
+  },
+  "8": {
+   "name": "Rostral Anterior Cingulate",
+   "hemi": "Right",
+   "lobe": "Cingulate & insula",
+   "mm": [
+    5.0,
+    39.0,
+    0.0
+   ],
+   "rgb": [
+    230,
+    153,
+    198
+   ]
+  },
+  "9": {
+   "name": "Superior Parietal",
+   "hemi": "Right",
+   "lobe": "Parietal",
+   "mm": [
+    23.0,
+    -59.0,
+    53.0
+   ],
+   "rgb": [
+    62,
+    179,
+    167
+   ]
+  },
+  "10": {
+   "name": "Inferior Parietal",
+   "hemi": "Right",
+   "lobe": "Parietal",
+   "mm": [
+    46.0,
+    -65.0,
+    32.0
+   ],
+   "rgb": [
+    10,
+    120,
+    108
+   ]
+  },
+  "11": {
+   "name": "Brainstem",
+   "hemi": "Right",
+   "lobe": "Deep structures",
+   "mm": [
+    6.0,
+    -31.0,
+    -36.0
+   ],
+   "rgb": [
+    81,
+    117,
+    189
+   ]
+  },
+  "12": {
+   "name": "Lingual",
+   "hemi": "Right",
+   "lobe": "Occipital",
+   "mm": [
+    11.0,
+    -67.0,
+    -4.0
+   ],
+   "rgb": [
+    242,
+    190,
+    77
+   ]
+  },
+  "13": {
+   "name": "Postcentral",
+   "hemi": "Right",
+   "lobe": "Parietal",
+   "mm": [
+    45.0,
+    -26.0,
+    45.0
+   ],
+   "rgb": [
+    12,
+    140,
+    126
+   ]
+  },
+  "14": {
+   "name": "Transverse Temporal",
+   "hemi": "Right",
+   "lobe": "Temporal",
+   "mm": [
+    47.0,
+    -19.0,
+    9.0
+   ],
+   "rgb": [
+    239,
+    159,
+    146
+   ]
+  },
+  "15": {
+   "name": "Medial Orbitofrontal",
+   "hemi": "Right",
+   "lobe": "Frontal",
+   "mm": [
+    5.0,
+    38.0,
+    -18.0
+   ],
+   "rgb": [
+    106,
+    79,
+    219
+   ]
+  },
+  "16": {
+   "name": "Paracentral",
+   "hemi": "Right",
+   "lobe": "Frontal",
+   "mm": [
+    8.0,
+    -26.0,
+    60.0
+   ],
+   "rgb": [
+    113,
+    84,
+    233
+   ]
+  },
+  "17": {
+   "name": "Optic Chiasm",
+   "hemi": "Right",
+   "lobe": "Deep structures",
+   "mm": [
+    7.0,
+    3.0,
+    -20.0
+   ],
+   "rgb": [
+    103,
+    140,
+    213
+   ]
+  },
+  "18": {
+   "name": "Parahippocampal",
+   "hemi": "Right",
+   "lobe": "Temporal",
+   "mm": [
+    25.0,
+    -31.0,
+    -18.0
+   ],
+   "rgb": [
+    232,
+    117,
+    98
+   ]
+  },
+  "19": {
+   "name": "Amygdala",
+   "hemi": "Right",
+   "lobe": "Deep structures",
+   "mm": [
+    23.0,
+    -4.0,
+    -21.0
+   ],
+   "rgb": [
+    72,
+    104,
+    168
+   ]
+  },
+  "20": {
+   "name": "Vermal lobules VIII-X",
+   "hemi": "Right",
+   "lobe": "Cerebellum",
+   "mm": [
+    2.0,
+    -60.0,
+    -38.0
+   ],
+   "rgb": [
+    174,
+    204,
+    156
+   ]
+  },
+  "21": {
+   "name": "Putamen",
+   "hemi": "Right",
+   "lobe": "Deep structures",
+   "mm": [
+    26.0,
+    4.0,
+    0.0
+   ],
+   "rgb": [
+    129,
+    160,
+    220
+   ]
+  },
+  "22": {
+   "name": "Pars Triangularis",
+   "hemi": "Right",
+   "lobe": "Frontal",
+   "mm": [
+    50.0,
+    34.0,
+    4.0
+   ],
+   "rgb": [
+    141,
+    113,
+    255
+   ]
+  },
+  "23": {
+   "name": "Insula",
+   "hemi": "Right",
+   "lobe": "Cingulate & insula",
+   "mm": [
+    40.0,
+    -1.0,
+    -1.0
+   ],
+   "rgb": [
+    187,
+    74,
+    140
+   ]
+  },
+  "24": {
+   "name": "Fusiform",
+   "hemi": "Right",
+   "lobe": "Temporal",
+   "mm": [
+    36.0,
+    -42.0,
+    -22.0
+   ],
+   "rgb": [
+    190,
+    80,
+    61
+   ]
+  },
+  "25": {
+   "name": "Basal Forebrain",
+   "hemi": "Right",
+   "lobe": "Deep structures",
+   "mm": [
+    7.0,
+    4.0,
+    -12.0
+   ],
+   "rgb": [
+    76,
+    110,
+    178
+   ]
+  },
+  "26": {
+   "name": "Ventral Diencephalon",
+   "hemi": "Right",
+   "lobe": "Deep structures",
+   "mm": [
+    10.0,
+    -17.0,
+    -10.0
+   ],
+   "rgb": [
+    156,
+    180,
+    228
+   ]
+  },
+  "27": {
+   "name": "Pallidum",
+   "hemi": "Right",
+   "lobe": "Deep structures",
+   "mm": [
+    19.0,
+    -2.0,
+    -2.0
+   ],
+   "rgb": [
+    116,
+    150,
+    217
+   ]
+  },
+  "28": {
+   "name": "Middle Temporal",
+   "hemi": "Right",
+   "lobe": "Temporal",
+   "mm": [
+    63.0,
+    -32.0,
+    -12.0
+   ],
+   "rgb": [
+    229,
+    96,
+    74
+   ]
+  },
+  "29": {
+   "name": "Third Ventricle",
+   "hemi": "Right",
+   "lobe": "Ventricles",
+   "mm": [
+    1.0,
+    -10.0,
+    -4.0
+   ],
+   "rgb": [
+    204,
+    204,
+    213
+   ]
+  },
+  "30": {
+   "name": "Caudal Anterior Cingulate",
+   "hemi": "Right",
+   "lobe": "Cingulate & insula",
+   "mm": [
+    4.0,
+    21.0,
+    26.0
+   ],
+   "rgb": [
+    160,
+    63,
+    120
+   ]
+  },
+  "31": {
+   "name": "Precuneus",
+   "hemi": "Right",
+   "lobe": "Parietal",
+   "mm": [
+    9.0,
+    -59.0,
+    39.0
+   ],
+   "rgb": [
+    14,
+    160,
+    145
+   ]
+  },
+  "32": {
+   "name": "Pars Opercularis",
+   "hemi": "Right",
+   "lobe": "Frontal",
+   "mm": [
+    48.0,
+    18.0,
+    10.0
+   ],
+   "rgb": [
+    120,
+    89,
+    247
+   ]
+  },
+  "33": {
+   "name": "Isthmus Cingulate",
+   "hemi": "Right",
+   "lobe": "Cingulate & insula",
+   "mm": [
+    6.0,
+    -46.0,
+    19.0
+   ],
+   "rgb": [
+    214,
+    85,
+    160
+   ]
+  },
+  "34": {
+   "name": "Lateral Occipital",
+   "hemi": "Right",
+   "lobe": "Occipital",
+   "mm": [
+    32.0,
+    -87.0,
+    3.0
+   ],
+   "rgb": [
+    220,
+    165,
+    45
+   ]
+  },
+  "35": {
+   "name": "Precentral",
+   "hemi": "Right",
+   "lobe": "Frontal",
+   "mm": [
+    48.0,
+    0.0,
+    40.0
+   ],
+   "rgb": [
+    153,
+    128,
+    255
+   ]
+  },
+  "36": {
+   "name": "Entorhinal",
+   "hemi": "Right",
+   "lobe": "Temporal",
+   "mm": [
+    21.0,
+    -5.0,
+    -34.0
+   ],
+   "rgb": [
+    171,
+    72,
+    55
+   ]
+  },
+  "37": {
+   "name": "Fourth Ventricle",
+   "hemi": "Right",
+   "lobe": "Ventricles",
+   "mm": [
+    3.0,
+    -44.0,
+    -31.0
+   ],
+   "rgb": [
+    127,
+    127,
+    138
+   ]
+  },
+  "38": {
+   "name": "Superior Frontal",
+   "hemi": "Right",
+   "lobe": "Frontal",
+   "mm": [
+    8.0,
+    32.0,
+    37.0
+   ],
+   "rgb": [
+    176,
+    157,
+    255
+   ]
+  },
+  "39": {
+   "name": "Cerebellum White Matter",
+   "hemi": "Right",
+   "lobe": "Cerebellum",
+   "mm": [
+    19.0,
+    -52.0,
+    -36.0
+   ],
+   "rgb": [
+    105,
+    148,
+    78
+   ]
+  },
+  "40": {
+   "name": "Thalamus",
+   "hemi": "Right",
+   "lobe": "Deep structures",
+   "mm": [
+    12.0,
+    -18.0,
+    7.0
+   ],
+   "rgb": [
+    142,
+    170,
+    224
+   ]
+  },
+  "41": {
+   "name": "Lateral Ventricle",
+   "hemi": "Right",
+   "lobe": "Ventricles",
+   "mm": [
+    14.0,
+    -22.0,
+    22.0
+   ],
+   "rgb": [
+    181,
+    181,
+    194
+   ]
+  },
+  "42": {
+   "name": "Caudal Middle Frontal",
+   "hemi": "Right",
+   "lobe": "Frontal",
+   "mm": [
+    39.0,
+    17.0,
+    48.0
+   ],
+   "rgb": [
+    93,
+    69,
+    191
+   ]
+  },
+  "43": {
+   "name": "Cuneus",
+   "hemi": "Right",
+   "lobe": "Occipital",
+   "mm": [
+    8.0,
+    -81.0,
+    22.0
+   ],
+   "rgb": [
+    180,
+    135,
+    37
+   ]
+  },
+  "44": {
+   "name": "Pars Orbitalis",
+   "hemi": "Right",
+   "lobe": "Frontal",
+   "mm": [
+    45.0,
+    34.0,
+    -10.0
+   ],
+   "rgb": [
+    129,
+    99,
+    255
+   ]
+  },
+  "45": {
+   "name": "Superior Temporal",
+   "hemi": "Right",
+   "lobe": "Temporal",
+   "mm": [
+    52.0,
+    -8.0,
+    -12.0
+   ],
+   "rgb": [
+    235,
+    138,
+    122
+   ]
+  },
+  "46": {
+   "name": "Cerebellum Gray Matter",
+   "hemi": "Right",
+   "lobe": "Cerebellum",
+   "mm": [
+    32.0,
+    -70.0,
+    -37.0
+   ],
+   "rgb": [
+    90,
+    127,
+    67
+   ]
+  },
+  "47": {
+   "name": "Posterior Cingulate",
+   "hemi": "Right",
+   "lobe": "Cingulate & insula",
+   "mm": [
+    4.0,
+    -20.0,
+    40.0
+   ],
+   "rgb": [
+    222,
+    119,
+    179
+   ]
+  },
+  "48": {
+   "name": "Hippocampus",
+   "hemi": "Right",
+   "lobe": "Deep structures",
+   "mm": [
+    27.0,
+    -24.0,
+    -15.0
+   ],
+   "rgb": [
+    90,
+    130,
+    210
+   ]
+  },
+  "49": {
+   "name": "Caudate",
+   "hemi": "Right",
+   "lobe": "Deep structures",
+   "mm": [
+    13.0,
+    10.0,
+    11.0
+   ],
+   "rgb": [
+    85,
+    123,
+    199
+   ]
+  },
+  "50": {
+   "name": "Vermal lobules I-V",
+   "hemi": "Right",
+   "lobe": "Cerebellum",
+   "mm": [
+    4.0,
+    -53.0,
+    -14.0
+   ],
+   "rgb": [
+    120,
+    170,
+    90
+   ]
+  },
+  "51": {
+   "name": "Supramarginal",
+   "hemi": "Right",
+   "lobe": "Parietal",
+   "mm": [
+    58.0,
+    -36.0,
+    38.0
+   ],
+   "rgb": [
+    110,
+    198,
+    189
+   ]
+  },
+  "52": {
+   "name": "Rostral Middle Frontal",
+   "hemi": "Left",
+   "lobe": "Frontal",
+   "mm": [
+    -39.0,
+    43.0,
+    17.0
+   ],
+   "rgb": [
+    164,
+    142,
+    255
+   ]
+  },
+  "53": {
+   "name": "Vermal lobules VI-VII",
+   "hemi": "Left",
+   "lobe": "Cerebellum",
+   "mm": [
+    -3.0,
+    -70.0,
+    -22.0
+   ],
+   "rgb": [
+    147,
+    187,
+    123
+   ]
+  },
+  "54": {
+   "name": "Inferior temporal",
+   "hemi": "Left",
+   "lobe": "Temporal",
+   "mm": [
+    -48.0,
+    -24.0,
+    -28.0
+   ],
+   "rgb": [
+    209,
+    88,
+    67
+   ]
+  },
+  "55": {
+   "name": "Accumbens Area",
+   "hemi": "Left",
+   "lobe": "Deep structures",
+   "mm": [
+    -9.0,
+    12.0,
+    -7.0
+   ],
+   "rgb": [
+    67,
+    97,
+    157
+   ]
+  },
+  "56": {
+   "name": "Inferior Lateral Ventricle",
+   "hemi": "Left",
+   "lobe": "Ventricles",
+   "mm": [
+    -29.0,
+    -16.0,
+    -13.0
+   ],
+   "rgb": [
+    155,
+    155,
+    169
+   ]
+  },
+  "57": {
+   "name": "Pericalcarine",
+   "hemi": "Left",
+   "lobe": "Occipital",
+   "mm": [
+    -11.0,
+    -83.0,
+    9.0
+   ],
+   "rgb": [
+    246,
+    210,
+    132
+   ]
+  },
+  "58": {
+   "name": "Lateral Orbitofrontal",
+   "hemi": "Left",
+   "lobe": "Frontal",
+   "mm": [
+    -23.0,
+    36.0,
+    -20.0
+   ],
+   "rgb": [
+    99,
+    74,
+    205
+   ]
+  },
+  "59": {
+   "name": "Rostral Anterior Cingulate",
+   "hemi": "Left",
+   "lobe": "Cingulate & insula",
+   "mm": [
+    -5.0,
+    39.0,
+    0.0
+   ],
+   "rgb": [
+    230,
+    153,
+    198
+   ]
+  },
+  "60": {
+   "name": "Superior Parietal",
+   "hemi": "Left",
+   "lobe": "Parietal",
+   "mm": [
+    -23.0,
+    -59.0,
+    53.0
+   ],
+   "rgb": [
+    62,
+    179,
+    167
+   ]
+  },
+  "61": {
+   "name": "Inferior Parietal",
+   "hemi": "Left",
+   "lobe": "Parietal",
+   "mm": [
+    -46.0,
+    -65.0,
+    32.0
+   ],
+   "rgb": [
+    10,
+    120,
+    108
+   ]
+  },
+  "62": {
+   "name": "Brainstem",
+   "hemi": "Left",
+   "lobe": "Deep structures",
+   "mm": [
+    -7.0,
+    -31.0,
+    -36.0
+   ],
+   "rgb": [
+    81,
+    117,
+    189
+   ]
+  },
+  "63": {
+   "name": "Lingual",
+   "hemi": "Left",
+   "lobe": "Occipital",
+   "mm": [
+    -11.0,
+    -67.0,
+    -4.0
+   ],
+   "rgb": [
+    242,
+    190,
+    77
+   ]
+  },
+  "64": {
+   "name": "Postcentral",
+   "hemi": "Left",
+   "lobe": "Parietal",
+   "mm": [
+    -45.0,
+    -26.0,
+    45.0
+   ],
+   "rgb": [
+    12,
+    140,
+    126
+   ]
+  },
+  "65": {
+   "name": "Transverse Temporal",
+   "hemi": "Left",
+   "lobe": "Temporal",
+   "mm": [
+    -47.0,
+    -19.0,
+    9.0
+   ],
+   "rgb": [
+    239,
+    159,
+    146
+   ]
+  },
+  "66": {
+   "name": "Medial Orbitofrontal",
+   "hemi": "Left",
+   "lobe": "Frontal",
+   "mm": [
+    -5.0,
+    38.0,
+    -18.0
+   ],
+   "rgb": [
+    106,
+    79,
+    219
+   ]
+  },
+  "67": {
+   "name": "Paracentral",
+   "hemi": "Left",
+   "lobe": "Frontal",
+   "mm": [
+    -8.0,
+    -26.0,
+    60.0
+   ],
+   "rgb": [
+    113,
+    84,
+    233
+   ]
+  },
+  "68": {
+   "name": "Optic Chiasm",
+   "hemi": "Left",
+   "lobe": "Deep structures",
+   "mm": [
+    -7.0,
+    3.0,
+    -20.0
+   ],
+   "rgb": [
+    103,
+    140,
+    213
+   ]
+  },
+  "69": {
+   "name": "Parahippocampal",
+   "hemi": "Left",
+   "lobe": "Temporal",
+   "mm": [
+    -25.0,
+    -31.0,
+    -18.0
+   ],
+   "rgb": [
+    232,
+    117,
+    98
+   ]
+  },
+  "70": {
+   "name": "Amygdala",
+   "hemi": "Left",
+   "lobe": "Deep structures",
+   "mm": [
+    -23.0,
+    -4.0,
+    -21.0
+   ],
+   "rgb": [
+    72,
+    104,
+    168
+   ]
+  },
+  "71": {
+   "name": "Vermal lobules VIII-X",
+   "hemi": "Left",
+   "lobe": "Cerebellum",
+   "mm": [
+    -3.0,
+    -60.0,
+    -39.0
+   ],
+   "rgb": [
+    174,
+    204,
+    156
+   ]
+  },
+  "72": {
+   "name": "Putamen",
+   "hemi": "Left",
+   "lobe": "Deep structures",
+   "mm": [
+    -26.0,
+    4.0,
+    0.0
+   ],
+   "rgb": [
+    129,
+    160,
+    220
+   ]
+  },
+  "73": {
+   "name": "Pars Triangularis",
+   "hemi": "Left",
+   "lobe": "Frontal",
+   "mm": [
+    -50.0,
+    34.0,
+    4.0
+   ],
+   "rgb": [
+    141,
+    113,
+    255
+   ]
+  },
+  "74": {
+   "name": "Insula",
+   "hemi": "Left",
+   "lobe": "Cingulate & insula",
+   "mm": [
+    -40.0,
+    -1.0,
+    -1.0
+   ],
+   "rgb": [
+    187,
+    74,
+    140
+   ]
+  },
+  "75": {
+   "name": "Fusiform",
+   "hemi": "Left",
+   "lobe": "Temporal",
+   "mm": [
+    -36.0,
+    -42.0,
+    -22.0
+   ],
+   "rgb": [
+    190,
+    80,
+    61
+   ]
+  },
+  "76": {
+   "name": "Basal Forebrain",
+   "hemi": "Left",
+   "lobe": "Deep structures",
+   "mm": [
+    -7.0,
+    4.0,
+    -12.0
+   ],
+   "rgb": [
+    76,
+    110,
+    178
+   ]
+  },
+  "77": {
+   "name": "Ventral Diencephalon",
+   "hemi": "Left",
+   "lobe": "Deep structures",
+   "mm": [
+    -10.0,
+    -17.0,
+    -10.0
+   ],
+   "rgb": [
+    156,
+    180,
+    228
+   ]
+  },
+  "78": {
+   "name": "Pallidum",
+   "hemi": "Left",
+   "lobe": "Deep structures",
+   "mm": [
+    -19.0,
+    -2.0,
+    -2.0
+   ],
+   "rgb": [
+    116,
+    150,
+    217
+   ]
+  },
+  "79": {
+   "name": "Middle Temporal",
+   "hemi": "Left",
+   "lobe": "Temporal",
+   "mm": [
+    -63.0,
+    -32.0,
+    -12.0
+   ],
+   "rgb": [
+    229,
+    96,
+    74
+   ]
+  },
+  "80": {
+   "name": "Third Ventricle",
+   "hemi": "Left",
+   "lobe": "Ventricles",
+   "mm": [
+    -2.0,
+    -8.0,
+    -4.0
+   ],
+   "rgb": [
+    204,
+    204,
+    213
+   ]
+  },
+  "81": {
+   "name": "Caudal Anterior Cingulate",
+   "hemi": "Left",
+   "lobe": "Cingulate & insula",
+   "mm": [
+    -4.0,
+    21.0,
+    26.0
+   ],
+   "rgb": [
+    160,
+    63,
+    120
+   ]
+  },
+  "82": {
+   "name": "Precuneus",
+   "hemi": "Left",
+   "lobe": "Parietal",
+   "mm": [
+    -9.0,
+    -59.0,
+    39.0
+   ],
+   "rgb": [
+    14,
+    160,
+    145
+   ]
+  },
+  "83": {
+   "name": "Pars Opercularis",
+   "hemi": "Left",
+   "lobe": "Frontal",
+   "mm": [
+    -48.0,
+    18.0,
+    10.0
+   ],
+   "rgb": [
+    120,
+    89,
+    247
+   ]
+  },
+  "84": {
+   "name": "Isthmus Cingulate",
+   "hemi": "Left",
+   "lobe": "Cingulate & insula",
+   "mm": [
+    -6.0,
+    -46.0,
+    19.0
+   ],
+   "rgb": [
+    214,
+    85,
+    160
+   ]
+  },
+  "85": {
+   "name": "Lateral Occipital",
+   "hemi": "Left",
+   "lobe": "Occipital",
+   "mm": [
+    -32.0,
+    -87.0,
+    3.0
+   ],
+   "rgb": [
+    220,
+    165,
+    45
+   ]
+  },
+  "86": {
+   "name": "Precentral",
+   "hemi": "Left",
+   "lobe": "Frontal",
+   "mm": [
+    -48.0,
+    0.0,
+    40.0
+   ],
+   "rgb": [
+    153,
+    128,
+    255
+   ]
+  },
+  "87": {
+   "name": "Entorhinal",
+   "hemi": "Left",
+   "lobe": "Temporal",
+   "mm": [
+    -21.0,
+    -5.0,
+    -34.0
+   ],
+   "rgb": [
+    171,
+    72,
+    55
+   ]
+  },
+  "88": {
+   "name": "Fourth Ventricle",
+   "hemi": "Left",
+   "lobe": "Ventricles",
+   "mm": [
+    -3.0,
+    -44.0,
+    -32.0
+   ],
+   "rgb": [
+    127,
+    127,
+    138
+   ]
+  },
+  "89": {
+   "name": "Superior Frontal",
+   "hemi": "Left",
+   "lobe": "Frontal",
+   "mm": [
+    -8.0,
+    32.0,
+    37.0
+   ],
+   "rgb": [
+    176,
+    157,
+    255
+   ]
+  },
+  "90": {
+   "name": "Cerebellum White Matter",
+   "hemi": "Left",
+   "lobe": "Cerebellum",
+   "mm": [
+    -19.0,
+    -52.0,
+    -36.0
+   ],
+   "rgb": [
+    105,
+    148,
+    78
+   ]
+  },
+  "91": {
+   "name": "Thalamus",
+   "hemi": "Left",
+   "lobe": "Deep structures",
+   "mm": [
+    -12.0,
+    -18.0,
+    7.0
+   ],
+   "rgb": [
+    142,
+    170,
+    224
+   ]
+  },
+  "92": {
+   "name": "Lateral Ventricle",
+   "hemi": "Left",
+   "lobe": "Ventricles",
+   "mm": [
+    -14.0,
+    -22.0,
+    22.0
+   ],
+   "rgb": [
+    181,
+    181,
+    194
+   ]
+  },
+  "93": {
+   "name": "Caudal Middle Frontal",
+   "hemi": "Left",
+   "lobe": "Frontal",
+   "mm": [
+    -39.0,
+    17.0,
+    48.0
+   ],
+   "rgb": [
+    93,
+    69,
+    191
+   ]
+  },
+  "94": {
+   "name": "Cuneus",
+   "hemi": "Left",
+   "lobe": "Occipital",
+   "mm": [
+    -8.0,
+    -81.0,
+    22.0
+   ],
+   "rgb": [
+    180,
+    135,
+    37
+   ]
+  },
+  "95": {
+   "name": "Pars Orbitalis",
+   "hemi": "Left",
+   "lobe": "Frontal",
+   "mm": [
+    -45.0,
+    34.0,
+    -10.0
+   ],
+   "rgb": [
+    129,
+    99,
+    255
+   ]
+  },
+  "96": {
+   "name": "Superior Temporal",
+   "hemi": "Left",
+   "lobe": "Temporal",
+   "mm": [
+    -52.0,
+    -8.0,
+    -12.0
+   ],
+   "rgb": [
+    235,
+    138,
+    122
+   ]
+  },
+  "97": {
+   "name": "Cerebellum Gray Matter",
+   "hemi": "Left",
+   "lobe": "Cerebellum",
+   "mm": [
+    -32.0,
+    -70.0,
+    -37.0
+   ],
+   "rgb": [
+    90,
+    127,
+    67
+   ]
+  },
+  "98": {
+   "name": "Posterior Cingulate",
+   "hemi": "Left",
+   "lobe": "Cingulate & insula",
+   "mm": [
+    -4.0,
+    -20.0,
+    40.0
+   ],
+   "rgb": [
+    222,
+    119,
+    179
+   ]
+  },
+  "99": {
+   "name": "Hippocampus",
+   "hemi": "Left",
+   "lobe": "Deep structures",
+   "mm": [
+    -27.0,
+    -24.0,
+    -15.0
+   ],
+   "rgb": [
+    90,
+    130,
+    210
+   ]
+  },
+  "100": {
+   "name": "Caudate",
+   "hemi": "Left",
+   "lobe": "Deep structures",
+   "mm": [
+    -13.0,
+    10.0,
+    11.0
+   ],
+   "rgb": [
+    85,
+    123,
+    199
+   ]
+  },
+  "101": {
+   "name": "Vermal lobules I-V",
+   "hemi": "Left",
+   "lobe": "Cerebellum",
+   "mm": [
+    -4.0,
+    -53.0,
+    -14.0
+   ],
+   "rgb": [
+    120,
+    170,
+    90
+   ]
+  },
+  "102": {
+   "name": "Supramarginal",
+   "hemi": "Left",
+   "lobe": "Parietal",
+   "mm": [
+    -58.0,
+    -36.0,
+    38.0
+   ],
+   "rgb": [
+    110,
+    198,
+    189
+   ]
+  }
+ },
+ "lobeColors": {
+  "Frontal": [
+   124,
+   92,
+   255
+  ],
+  "Parietal": [
+   14,
+   160,
+   145
+  ],
+  "Temporal": [
+   229,
+   96,
+   74
+  ],
+  "Occipital": [
+   240,
+   180,
+   50
+  ],
+  "Cingulate & insula": [
+   214,
+   85,
+   160
+  ],
+  "Deep structures": [
+   90,
+   130,
+   210
+  ],
+  "Cerebellum": [
+   120,
+   170,
+   90
+  ],
+  "Ventricles": [
+   170,
+   170,
+   185
+  ]
+ },
+ "electrodes": [
+  {
+   "name": "Fp1",
+   "old": null,
+   "scalp": [
+    -29.4,
+    83.9,
+    -7.0
+   ],
+   "cortex": [
+    -25.0,
+    70.0,
+    -4.0
+   ],
+   "regions": [
+    {
+     "id": 89,
+     "pct": 82
+    },
+    {
+     "id": 52,
+     "pct": 12
+    }
+   ]
+  },
+  {
+   "name": "Fpz",
+   "old": null,
+   "scalp": [
+    0.1,
+    88.2,
+    -1.7
+   ],
+   "cortex": [
+    -2.0,
+    68.0,
+    2.0
+   ],
+   "regions": [
+    {
+     "id": 89,
+     "pct": 63
+    },
+    {
+     "id": 38,
+     "pct": 26
+    }
+   ]
+  },
+  {
+   "name": "Fp2",
+   "old": null,
+   "scalp": [
+    29.9,
+    84.9,
+    -7.1
+   ],
+   "cortex": [
+    25.0,
+    70.0,
+    -4.0
+   ],
+   "regions": [
+    {
+     "id": 38,
+     "pct": 82
+    },
+    {
+     "id": 1,
+     "pct": 12
+    }
+   ]
+  },
+  {
+   "name": "F7",
+   "old": null,
+   "scalp": [
+    -70.3,
+    42.5,
+    -11.4
+   ],
+   "cortex": [
+    -56.0,
+    32.0,
+    -6.0
+   ],
+   "regions": [
+    {
+     "id": 73,
+     "pct": 87
+    },
+    {
+     "id": 95,
+     "pct": 13
+    }
+   ]
+  },
+  {
+   "name": "F3",
+   "old": null,
+   "scalp": [
+    -50.2,
+    53.1,
+    42.2
+   ],
+   "cortex": [
+    -41.0,
+    40.0,
+    37.0
+   ],
+   "regions": [
+    {
+     "id": 52,
+     "pct": 96
+    }
+   ]
+  },
+  {
+   "name": "Fz",
+   "old": null,
+   "scalp": [
+    0.3,
+    58.5,
+    66.5
+   ],
+   "cortex": [
+    -2.0,
+    40.0,
+    54.0
+   ],
+   "regions": [
+    {
+     "id": 89,
+     "pct": 65
+    },
+    {
+     "id": 38,
+     "pct": 35
+    }
+   ]
+  },
+  {
+   "name": "F4",
+   "old": null,
+   "scalp": [
+    51.8,
+    54.3,
+    40.8
+   ],
+   "cortex": [
+    42.0,
+    40.0,
+    36.0
+   ],
+   "regions": [
+    {
+     "id": 1,
+     "pct": 98
+    }
+   ]
+  },
+  {
+   "name": "F8",
+   "old": null,
+   "scalp": [
+    73.0,
+    44.4,
+    -12.0
+   ],
+   "cortex": [
+    56.0,
+    32.0,
+    -6.0
+   ],
+   "regions": [
+    {
+     "id": 22,
+     "pct": 87
+    },
+    {
+     "id": 44,
+     "pct": 13
+    }
+   ]
+  },
+  {
+   "name": "T7",
+   "old": "T3",
+   "scalp": [
+    -84.2,
+    -16.0,
+    -9.3
+   ],
+   "cortex": [
+    -69.0,
+    -16.0,
+    -4.0
+   ],
+   "regions": [
+    {
+     "id": 96,
+     "pct": 65
+    },
+    {
+     "id": 79,
+     "pct": 35
+    }
+   ]
+  },
+  {
+   "name": "C3",
+   "old": null,
+   "scalp": [
+    -65.4,
+    -11.6,
+    64.4
+   ],
+   "cortex": [
+    -55.0,
+    -13.0,
+    56.0
+   ],
+   "regions": [
+    {
+     "id": 64,
+     "pct": 70
+    },
+    {
+     "id": 86,
+     "pct": 30
+    }
+   ]
+  },
+  {
+   "name": "Cz",
+   "old": null,
+   "scalp": [
+    0.4,
+    -9.2,
+    100.2
+   ],
+   "cortex": [
+    -2.0,
+    -12.0,
+    73.0
+   ],
+   "regions": [
+    {
+     "id": 67,
+     "pct": 55
+    },
+    {
+     "id": 16,
+     "pct": 30
+    },
+    {
+     "id": 89,
+     "pct": 12
+    }
+   ]
+  },
+  {
+   "name": "C4",
+   "old": null,
+   "scalp": [
+    67.1,
+    -10.9,
+    63.6
+   ],
+   "cortex": [
+    56.0,
+    -13.0,
+    55.0
+   ],
+   "regions": [
+    {
+     "id": 13,
+     "pct": 71
+    },
+    {
+     "id": 35,
+     "pct": 29
+    }
+   ]
+  },
+  {
+   "name": "T8",
+   "old": "T4",
+   "scalp": [
+    85.1,
+    -15.0,
+    -9.5
+   ],
+   "cortex": [
+    69.0,
+    -16.0,
+    -4.0
+   ],
+   "regions": [
+    {
+     "id": 45,
+     "pct": 65
+    },
+    {
+     "id": 28,
+     "pct": 35
+    }
+   ]
+  },
+  {
+   "name": "P7",
+   "old": "T5",
+   "scalp": [
+    -72.4,
+    -73.5,
+    -2.5
+   ],
+   "cortex": [
+    -61.0,
+    -65.0,
+    0.0
+   ],
+   "regions": [
+    {
+     "id": 79,
+     "pct": 100
+    }
+   ]
+  },
+  {
+   "name": "P3",
+   "old": null,
+   "scalp": [
+    -53.0,
+    -78.8,
+    55.9
+   ],
+   "cortex": [
+    -45.0,
+    -71.0,
+    50.0
+   ],
+   "regions": [
+    {
+     "id": 61,
+     "pct": 100
+    }
+   ]
+  },
+  {
+   "name": "Pz",
+   "old": null,
+   "scalp": [
+    0.3,
+    -81.1,
+    82.6
+   ],
+   "cortex": [
+    -1.0,
+    -60.0,
+    61.0
+   ],
+   "regions": [
+    {
+     "id": 82,
+     "pct": 49
+    },
+    {
+     "id": 31,
+     "pct": 39
+    }
+   ]
+  },
+  {
+   "name": "P4",
+   "old": null,
+   "scalp": [
+    55.7,
+    -78.6,
+    56.6
+   ],
+   "cortex": [
+    47.0,
+    -69.0,
+    50.0
+   ],
+   "regions": [
+    {
+     "id": 10,
+     "pct": 100
+    }
+   ]
+  },
+  {
+   "name": "P8",
+   "old": "T6",
+   "scalp": [
+    73.1,
+    -73.1,
+    -2.5
+   ],
+   "cortex": [
+    62.0,
+    -64.0,
+    0.0
+   ],
+   "regions": [
+    {
+     "id": 28,
+     "pct": 100
+    }
+   ]
+  },
+  {
+   "name": "O1",
+   "old": null,
+   "scalp": [
+    -29.4,
+    -112.4,
+    8.8
+   ],
+   "cortex": [
+    -26.0,
+    -102.0,
+    9.0
+   ],
+   "regions": [
+    {
+     "id": 85,
+     "pct": 100
+    }
+   ]
+  },
+  {
+   "name": "Oz",
+   "old": null,
+   "scalp": [
+    0.1,
+    -114.9,
+    14.7
+   ],
+   "cortex": [
+    -2.0,
+    -95.0,
+    15.0
+   ],
+   "regions": [
+    {
+     "id": 94,
+     "pct": 37
+    },
+    {
+     "id": 85,
+     "pct": 28
+    },
+    {
+     "id": 43,
+     "pct": 28
+    }
+   ]
+  },
+  {
+   "name": "O2",
+   "old": null,
+   "scalp": [
+    29.8,
+    -112.2,
+    8.8
+   ],
+   "cortex": [
+    26.0,
+    -102.0,
+    9.0
+   ],
+   "regions": [
+    {
+     "id": 34,
+     "pct": 100
+    }
+   ]
+  }
+ ]
+}

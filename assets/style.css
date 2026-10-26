@@ -436,3 +436,47 @@ footer {
 .post-figure img { width: 100%; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg); }
 .post-figure.narrow { max-width: 520px; }
 .post-figure figcaption { font-size: 0.9rem; color: var(--muted); margin-top: 6px; }
+
+/* ---------- Brain atlas page ---------- */
+.atlas-page { max-width: 1180px; }
+.atlas-layout { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 18px; align-items: start; }
+@media (max-width: 900px) { .atlas-layout { grid-template-columns: 1fr; } }
+.viewer-card { background: #120f22; border-radius: var(--radius); padding: 12px; box-shadow: 0 12px 32px rgba(30, 15, 70, 0.25); }
+.viewer-wrap { position: relative; width: 100%; height: 560px; }
+.viewer-wrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; border-radius: 8px; outline: none; }
+@media (max-width: 640px) { .viewer-wrap { height: 420px; } }
+.viewer-tools { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin-top: 10px; color: #e9e5ff; font-size: 0.9rem; }
+.viewer-tools .seg { display: inline-flex; border: 1px solid #4a3d7d; border-radius: 999px; overflow: hidden; }
+.viewer-tools .seg button { background: transparent; color: #d9d3f5; border: 0; padding: 5px 12px; font: inherit; cursor: pointer; }
+.viewer-tools .seg button.on { background: linear-gradient(90deg, #7c5cff, #e5604a); color: #fff; }
+.viewer-tools label { display: flex; align-items: center; gap: 6px; }
+.viewer-tools input[type="range"] { accent-color: #f08aa8; width: 110px; }
+.viewer-status { color: #b9b2d9; font-size: 0.85rem; margin: 8px 2px 0; min-height: 1.2em; }
+
+.side-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+.side-card + .side-card { margin-top: 14px; }
+.side-card h3 { margin: 0 0 6px; font-size: 1.15rem; }
+.side-card .kicker { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 2px; }
+.side-card select { width: 100%; padding: 7px 8px; border-radius: 8px; border: 1px solid var(--border); font: inherit; background: var(--bg); color: var(--text); }
+.chip { display: inline-block; font-size: 0.8rem; border-radius: 999px; padding: 1px 10px; color: #fff; margin: 2px 6px 6px 0; }
+.info-body p { margin: 6px 0; }
+.info-body .coords { font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.under-list { list-style: none; padding: 0; margin: 6px 0 0; }
+.under-list li { display: grid; grid-template-columns: 1fr 42px; gap: 8px; align-items: center; margin: 5px 0; font-size: 0.92rem; }
+.under-list button { text-align: left; background: none; border: 0; padding: 0; font: inherit; color: var(--accent); cursor: pointer; }
+.under-list .pct { font-variant-numeric: tabular-nums; color: var(--muted); text-align: right; }
+.under-list .bar { grid-column: 1 / -1; height: 5px; border-radius: 3px; background: var(--accent-soft); overflow: hidden; margin-top: -2px; }
+.under-list .bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--coral)); }
+
+.headmap { width: 100%; max-width: 300px; display: block; margin: 4px auto 0; }
+.headmap .head { fill: var(--bg); stroke: var(--muted); stroke-width: 1.5; }
+.headmap .el circle { fill: #fff; stroke: var(--accent); stroke-width: 1.5; cursor: pointer; transition: fill 0.15s; }
+.headmap .el text { font-size: 9px; text-anchor: middle; dominant-baseline: central; fill: var(--text); pointer-events: none; font-weight: 600; }
+.headmap .el:hover circle, .headmap .el:focus circle { fill: var(--accent-soft); }
+.headmap .el.on circle { fill: url(#elGrad); stroke: #fff; }
+.headmap .el.on text { fill: #fff; }
+.headmap .el:focus { outline: none; }
+.lobe-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 0.85rem; margin-top: 8px; }
+.lobe-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 5px; }
+.credits { font-size: 0.9rem; color: var(--muted); }
+.credits li { margin-bottom: 6px; }
