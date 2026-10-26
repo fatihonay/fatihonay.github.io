@@ -21,6 +21,13 @@ A plain HTML/CSS site with no build step. It works on GitHub Pages, Netlify, Clo
 
 To preview the site, open `index.html` in a browser.
 
+**After changing `assets/style.css` or `assets/site.js`:** bump the version tag on every page so visitors' browsers
+fetch the new file instead of an old saved copy (e.g. change `?v=20261026` to today's date):
+
+```bash
+sed -i '' 's/?v=20261026/?v=20261101/g' *.html notes/*.html
+```
+
 ## Adding a weekly Lab Note
 
 1. Copy `notes/_template.html` to a new file, e.g. `notes/2026-10-29-my-topic.html`, and write the note.

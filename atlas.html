@@ -7,11 +7,11 @@
   <meta name="description" content="Interactive 3D brain atlas with the 10-20 EEG electrodes: click a region or an electrode to see what lies beneath and what it does.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/style.css?v=20261026">
 </head>
 <body>
   <div id="site-header"></div>
-  <script src="assets/site.js"></script>
+  <script src="assets/site.js?v=20261026"></script>
 
   <main class="container atlas-page">
     <h1>Interactive Brain Atlas</h1>
@@ -44,7 +44,7 @@
       <aside>
         <div class="side-card">
           <p class="kicker">EEG 10-20 electrodes</p>
-          <svg class="headmap" id="headmap" viewBox="-125 -132 250 260" role="group" aria-label="Electrode head map, nose at the top">
+          <svg class="headmap" id="headmap" viewBox="-125 -132 250 260" width="300" height="312" role="group" aria-label="Electrode head map, nose at the top">
             <defs>
               <linearGradient id="elGrad" x1="0" x2="1"><stop offset="0" stop-color="#7c5cff"/><stop offset="1" stop-color="#e5604a"/></linearGradient>
             </defs>
