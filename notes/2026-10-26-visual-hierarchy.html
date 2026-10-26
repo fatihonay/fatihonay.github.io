@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>From edges to objects: how the brain sees · Fatih Onay</title>
-  <meta name="description" content="Draw a shape and watch it pass through a tiny brain-like visual hierarchy: edges, pooled edges, then corners — the same idea behind CNNs.">
+  <meta name="description" content="Draw a shape and watch it climb a tiny brain-like visual hierarchy, from edges to corners to object cells — the same idea behind CNNs.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/style.css">
@@ -62,31 +62,36 @@
             <span><i style="background:#ffc857"></i>diagonal ╱</span>
           </span>
         </div>
+
+        <p class="panel-title" style="margin-top:16px">5 · Object cells (IT)</p>
+        <div class="object-cells" id="objects" aria-live="polite"></div>
+
         <div class="controls">
           <button data-shape="house">House</button>
+          <button data-shape="square" class="ghost">Square</button>
           <button data-shape="triangle" class="ghost">Triangle</button>
           <button data-shape="circle" class="ghost">Circle</button>
           <button data-shape="letter" class="ghost">Letter A</button>
           <button id="clear" class="ghost">Clear</button>
         </div>
-        <p class="sim-caption">Draw in the first panel with your mouse or finger. Each later panel is computed live from the one before it.</p>
+        <p class="sim-caption">Draw in the first panel with your mouse or finger. Each later stage is computed live from the one before it.</p>
       </div>
 
       <div class="callout">
         <strong>Try this:</strong> clear the canvas and draw one straight line.
-        Only one colour lights up in panel 2: a single group of edge cells
-        "likes" that angle. Now draw a square. Its four corners light up in panel 4,
-        even though no single edge cell knows what a corner is.
+        Only one colour lights up in panel 2. Now draw a triangle, small and in a
+        corner of the canvas. The <em>Triangle</em> object cell still wins, even
+        though every edge cell that fires is a different one from before.
       </div>
 
-      <h2>What each panel does</h2>
+      <h2>What each stage does</h2>
       <p>
         <strong>Edge cells.</strong> Four small filters slide over the image,
         one per angle. Each filter is a <em>Gabor</em> pattern, a close
         mathematical match to the receptive fields of V1 simple cells. A cell
-        fires only when the image under it matches its preferred angle; weak or
-        negative matches are cut to zero, just as a neuron can't fire "below
-        zero".
+        fires only when the image under it matches its preferred angle, and cells
+        tuned to other angles at the same place suppress each other, so the best
+        match wins.
       </p>
       <p>
         <strong>Pooled edges.</strong> Each unit takes the strongest response
@@ -96,44 +101,152 @@
       </p>
       <p>
         <strong>Corner cells.</strong> Each unit fires when two different angles
-        meet in the same place. This is a new feature built only by combining
-        simpler ones. Neurons in V2 and V4 respond to corners, junctions and
-        curves in the same way. You may notice that the two ends of a straight
-        line also light up: the edge "fades out" there, which looks like a change
-        of angle. Real visual cortex has <em>end-stopped</em> cells that respond
-        to line endings in a similar way.
+        meet in the same place, a new feature built only by combining simpler
+        ones. Neurons in V2 and V4 respond to corners, junctions and curves in a
+        similar way. The ends of a straight line also light up, because the edge
+        "fades out" there. Real cortex has <em>end-stopped</em> cells that do the same.
+      </p>
+      <p>
+        <strong>Object cells.</strong> Each object cell looks at the whole shape at
+        once: which edge angles appear, where they sit in the shape (top, bottom,
+        left, right) and how many corners there are. It compares this pattern with
+        what it learned from a few examples of its shape, and fires in proportion to
+        the match. Because
+        it measures positions relative to the shape itself, it doesn't care where on
+        the canvas you draw, or how big. Neurons in IT show the same
+        <em>tolerance</em>: a face cell fires for a face whether it is near or far,
+        left or right.
       </p>
 
       <h2>The same idea in a CNN</h2>
       <p>
-        A convolutional neural network (CNN) is built from the same three steps,
-        stacked many times: <em>convolution</em> (a bank of filters sliding over
-        the image), a <em>threshold</em> (ReLU), and <em>pooling</em>. The
-        difference is that a CNN <em>learns</em> its filters from millions of
-        photos instead of having them designed by hand. Remarkably, trained
-        networks end up with Gabor-like edge detectors in their first layer, much
-        like V1.
+        A convolutional neural network (CNN) is built from the same steps you just
+        watched: <em>convolution</em> (a bank of filters sliding over the image), a
+        <em>threshold</em> (ReLU), and <em>pooling</em>, stacked many times and
+        ending in units that stand for whole objects.
       </p>
-      <p>You can see this yourself with a network trained on everyday photos:</p>
-<pre><code>import torchvision
-import matplotlib.pyplot as plt
-
-net = torchvision.models.alexnet(weights="DEFAULT")   # trained on ImageNet
-w = net.features[0].weight.detach()                    # 64 first-layer filters
-w = (w - w.min()) / (w.max() - w.min())                # rescale for display
-
-fig, axes = plt.subplots(8, 8, figsize=(6, 6))
-for ax, f in zip(axes.flat, w):
-    ax.imshow(f.permute(1, 2, 0))
-    ax.axis("off")
-plt.suptitle("Layer 1 of a trained CNN: edge and colour detectors")
-plt.show()</code></pre>
+      <table class="compare">
+        <tr><th>Stage</th><th>Brain</th><th>This demo</th><th>CNN</th></tr>
+        <tr><td>1</td><td>Retina</td><td>Your drawing</td><td>Input image</td></tr>
+        <tr><td>2</td><td>V1 simple cells</td><td>4 hand-made edge filters</td><td>Layer 1: dozens of learned filters</td></tr>
+        <tr><td>3</td><td>V1 complex cells</td><td>Max pooling</td><td>Pooling layer</td></tr>
+        <tr><td>4</td><td>V2 / V4</td><td>Corner cells</td><td>Middle layers: textures, corners, parts</td></tr>
+        <tr><td>5</td><td>IT cortex</td><td>5 object cells, 5 examples each</td><td>Final layer: 1000+ object classes</td></tr>
+      </table>
       <p>
-        The similarity goes deeper than layer 1. Deeper layers of trained CNNs
-        predict the responses of neurons in V4 and IT
+        The big difference is that a CNN <em>learns</em> every filter from millions
+        of labelled photos instead of having them designed by hand. Remarkably, it
+        ends up with the same kind of hierarchy: edge detectors first, then
+        textures and object parts, then whole objects. You can browse many more
+        examples in <a href="https://doi.org/10.23915/distill.00007">Olah et al.'s
+        <em>Feature Visualization</em></a>.
+      </p>
+      <h2>Inside a real CNN</h2>
+      <p>
+        The demo above uses filters I designed by hand. To check that the same
+        hierarchy appears in a network that <em>learned</em> everything by itself,
+        I took <strong>ResNet-18</strong>, a standard CNN already trained by others
+        on 1.2 million labelled photos (ImageNet, 1000 object categories). I did not
+        train or change it; I only looked inside. In four steps:
+      </p>
+      <ol>
+        <li><strong>Read its first-layer filters:</strong> the network's own "V1".</li>
+        <li><strong>Show it one photo</strong> (a cat) and record what each of its five stages computes.</li>
+        <li><strong>Ask which parts of the photo</strong> made it say "cat".</li>
+        <li><strong>Read its final answer:</strong> the five most likely categories.</li>
+      </ol>
+
+      <h3>Step 1 · The learned edge detectors</h3>
+      <p>
+        <strong>What I did:</strong> the first layer of ResNet-18 is a bank of 64 small
+        filters, each 7×7 pixels in three colour channels. I simply drew them as images.
+        <strong>How to read it:</strong> each square is one filter, the pattern it
+        "looks for" in the image. Nobody designed these; they emerged from training.
+        Yet many are light–dark stripes at different angles: oriented edge detectors,
+        just like the Gabor filters in the demo and the V1 cells Hubel and Wiesel found.
+        Others respond to colour contrast.
+      </p>
+      <figure class="post-figure narrow">
+        <img src="../assets/img/notes/cnn-layer1-filters.png" alt="Grid of 64 small coloured filters learned by ResNet-18's first layer; many show light and dark stripes at different angles" loading="lazy">
+      </figure>
+
+      <h3>Steps 2 and 3 · One photo passing through the network</h3>
+      <p>
+        <strong>What I did:</strong> I fed the network a photo of a cat and recorded the
+        output of each of its five stages. Each stage contains hundreds of units (64 in
+        stage 1, 512 in stage 5); from each stage I show the one unit whose map has the
+        clearest spatial pattern. Then I computed a <em>class activation map</em>: it
+        combines the last stage's maps using the weights the network uses to vote for
+        "cat", showing where that vote comes from.
+      </p>
+      <p>
+        <strong>How to read it:</strong> in each map, bright means "this unit fires
+        strongly here". Moving from stage 1 to stage 5, the maps get coarser
+        (112×112 → 7×7 units), because each unit now covers a larger patch of the photo,
+        like receptive fields growing from V1 to IT. Stage 1 traces edges in full detail.
+        By stage 4, the unit shown fires around the <em>eyes</em>: an object part,
+        found without anyone telling the network what an eye is. The second-to-last
+        panel glows over the regions that pushed the network towards "cat".
+      </p>
+      <figure class="post-figure">
+        <img src="../assets/img/notes/cnn-feature-maps.png" alt="A cat photo and five maps from successive stages of ResNet-18, getting coarser; the stage-4 map is brightest around the eyes; a final overlay shows the cat evidence" loading="lazy">
+        <figcaption>Photo: "Chelsea" from scikit-image's sample images (CC0). Class
+        activation map: <a href="https://doi.org/10.1109/CVPR.2016.319">Zhou et al., 2016</a>.</figcaption>
+      </figure>
+
+      <h3>Step 4 · The network's answer</h3>
+      <p>
+        <strong>What I did:</strong> the last layer has one unit per category (1000 in
+        total). I converted their outputs to probabilities and kept the top five.
+        <strong>How to read it:</strong> all five guesses are kinds of cat. The network
+        is sure it sees a cat, but less sure which breed, a reasonable answer for a
+        tabby-like cat.
+      </p>
+      <figure class="post-figure narrow">
+        <img src="../assets/img/notes/cnn-predictions.png" alt="Bar chart of the network's top-5 guesses: Egyptian cat 39%, tiger cat 39%, tabby 22%, lynx 0.5%, Persian cat 0%" loading="lazy">
+      </figure>
+
+      <h3>The code</h3>
+      <p>
+        All three figures come from one short Python script you can run yourself:
+        <a href="code/cnn_figures.py" download>cnn_figures.py</a>
+        (needs <code>torch</code>, <code>torchvision</code>, <code>scikit-image</code>).
+        Its core follows the four steps:
+      </p>
+<pre><code>import torch
+from skimage import data
+from torchvision.models import resnet18, ResNet18_Weights
+
+weights = ResNet18_Weights.IMAGENET1K_V1
+net = resnet18(weights=weights).eval()            # trained CNN, used as-is
+
+# Step 1: the 64 first-layer filters (64 x 3 x 7 x 7)
+filters = net.conv1.weight.detach()
+
+# Step 2: show it a photo and record each stage's output
+stages = {"Stage 1": net.relu, "Stage 2": net.layer1, "Stage 3": net.layer2,
+          "Stage 4": net.layer3, "Stage 5": net.layer4}
+maps = {}
+for name, layer in stages.items():
+    layer.register_forward_hook(lambda m, i, out, name=name: maps.__setitem__(name, out[0]))
+photo = torch.from_numpy(data.chelsea()).permute(2, 0, 1)
+x = weights.transforms()(photo).unsqueeze(0)      # resize, crop, normalise
+scores = net(x)[0].detach()
+
+# Step 3: where the "cat" vote comes from (class activation map)
+cat = scores.argmax()
+cam = torch.einsum("c,chw->hw", net.fc.weight[cat], maps["Stage 5"]).clamp(min=0)
+
+# Step 4: the top-5 answers
+top = scores.softmax(0).topk(5)
+print([weights.meta["categories"][i] for i in top.indices])</code></pre>
+
+      <p>
+        The match with the brain is more than a visual resemblance. Deeper layers
+        of trained CNNs predict the responses of neurons in V4 and IT
         (<a href="https://doi.org/10.1073/pnas.1403112111">Yamins et al., 2014</a>).
-        In human MEG, early CNN layers match early brain responses and deep
-        layers match later ones
+        In human MEG, early CNN layers match early brain responses (around 100 ms)
+        and deep layers match later ones
         (<a href="https://doi.org/10.1038/srep27755">Cichy et al., 2016</a>).
       </p>
 
@@ -148,9 +261,9 @@ plt.show()</code></pre>
         upcoming note.
       </p>
       <p class="post-meta" style="margin-top:24px">
-        Note: the demo uses four hand-made filters and simple pooling to show
-        the principle. Real visual cortex and real CNNs have thousands of
-        feature types and many more stages.
+        Note: the demo uses four hand-made filters, simple pooling and five examples
+        per object to show the principle. Real visual cortex and real CNNs have
+        thousands of feature types, many more stages, and learn from experience.
       </p>
     </article>
   </main>
@@ -162,12 +275,14 @@ plt.show()</code></pre>
     const N = 128;                       // input resolution
     const ORIENT = [0, 45, 90, 135];     // preferred line angle (degrees)
     const COLORS = [[139, 108, 255], [255, 122, 138], [63, 214, 192], [255, 200, 87]];
+    const OBJECTS = [["house", "House"], ["square", "Square"], ["triangle", "Triangle"],
+                     ["circle", "Circle"], ["letter", "Letter A"]];
 
     const input = document.getElementById("input");
-    const ictx = input.getContext("2d");
+    const ictx = input.getContext("2d", { willReadFrequently: true });
     const out = ["l1", "l2", "l3"].map((id) => document.getElementById(id).getContext("2d"));
 
-    // Even-symmetric Gabor filters tuned to lines at each angle (zero mean).
+    // ----- Stage 2: even-symmetric Gabor filters tuned to lines at each angle -----
     const R = 5, SIGMA = 2.5, LAMBDA = 8, GAMMA = 0.5;
     const kernels = ORIENT.map((deg) => {
       const phi = ((deg + 90) * Math.PI) / 180;   // modulation runs across the line
@@ -185,7 +300,6 @@ plt.show()</code></pre>
 
     function convolveRelu(img, kernel) {
       const outMap = new Float32Array(N * N);
-      const S = 2 * R + 1;
       for (let y = R; y < N - R; y++) {
         for (let x = R; x < N - R; x++) {
           let s = 0, i = 0;
@@ -216,24 +330,105 @@ plt.show()</code></pre>
       return outMap;
     }
 
-    // 3x3 neighbourhood max, so two edges that meet at a corner overlap.
-    function spread(map, n) {
-      const outMap = new Float32Array(n * n);
-      for (let y = 0; y < n; y++) {
-        for (let x = 0; x < n; x++) {
-          let m = 0;
-          for (let dy = -1; dy <= 1; dy++) {
-            for (let dx = -1; dx <= 1; dx++) {
-              const yy = y + dy, xx = x + dx;
-              if (yy >= 0 && yy < n && xx >= 0 && xx < n && map[yy * n + xx] > m) m = map[yy * n + xx];
-            }
-          }
-          outMap[y * n + x] = m;
-        }
+    // Runs stages 2–4 and returns every layer plus a whole-shape description for stage 5.
+    function analyze(gray) {
+      const l1 = kernels.map((k) => convolveRelu(gray, k));
+      // Competition between angles: cells tuned to other angles at the same place suppress each other.
+      for (let p = 0; p < N * N; p++) {
+        const mean = (l1[0][p] + l1[1][p] + l1[2][p] + l1[3][p]) / 4;
+        for (let k = 0; k < 4; k++) l1[k][p] = Math.max(0, l1[k][p] - 1.2 * mean);
       }
-      return outMap;
+      const max1 = Math.max(1, ...l1.map((m) => m.reduce((a, b) => (b > a ? b : a), 0)));
+      const l2 = l1.map((m) => maxPool(m, N, 4));
+
+      // A corner cell needs a second, different angle in the same cell.
+      const corners = new Float32Array(32 * 32);
+      for (let p = 0; p < 32 * 32; p++) {
+        corners[p] = [l2[0][p], l2[1][p], l2[2][p], l2[3][p]].sort((a, b) => b - a)[1];
+      }
+      const l3 = maxPool(corners, 32, 2);
+      return { l1, l2, l3, max1, shape: describe(gray, l2, l3, max1) };
     }
 
+    // Stage 5 input: which edge angle dominates in each ninth (3x3 grid) of the shape's own
+    // bounding box, plus how many corners there are. Measured relative to the shape, so it
+    // ignores where on the canvas the shape is and how big it is.
+    const G = 3;
+    function describe(gray, l2, l3, max1) {
+      let x0 = N, y0 = N, x1 = -1, y1 = -1;
+      for (let y = 0; y < N; y++) {
+        for (let x = 0; x < N; x++) {
+          if (gray[y * N + x] > 0.5) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+        }
+      }
+      if (x1 - x0 < 6 && y1 - y0 < 6) return null;          // nothing drawn yet
+      const w = Math.max(x1 - x0, 8) + 1, h = Math.max(y1 - y0, 8) + 1;
+      const v = new Array(G * G * 4 + 1).fill(0);
+      for (let y = 0; y < 32; y++) {
+        for (let x = 0; x < 32; x++) {
+          const p = y * 32 + x, cx = x * 4 + 2, cy = y * 4 + 2;
+          if (cx < x0 - 2 || cx > x1 + 2 || cy < y0 - 2 || cy > y1 + 2) continue;
+          let kb = 0;
+          for (let k = 1; k < 4; k++) if (l2[k][p] > l2[kb][p]) kb = k;
+          if (l2[kb][p] < max1 * 0.1) continue;
+          const qx = Math.min(G - 1, Math.max(0, Math.floor(((cx - x0) / w) * G)));
+          const qy = Math.min(G - 1, Math.max(0, Math.floor(((cy - y0) / h) * G)));
+          v[(qy * G + qx) * 4 + kb] += 1;
+        }
+      }
+      const total = v.reduce((a, b) => a + b, 0) || 1;
+      for (let i = 0; i < G * G * 4; i++) v[i] /= total;
+      const peak = Math.max(...l3);
+      const corners = l3.filter((c) => c > peak * 0.7 && c > max1 * 0.15).length;
+      v[G * G * 4] = Math.min(corners, 12) * 0.015;
+      return v;
+    }
+
+    const cosine = (a, b) => {
+      let ab = 0, aa = 0, bb = 0;
+      for (let i = 0; i < a.length; i++) { ab += a[i] * b[i]; aa += a[i] * a[i]; bb += b[i] * b[i]; }
+      return ab / Math.sqrt(aa * bb);
+    };
+
+    // ----- Shapes, as strokes inside a unit box (shared by the presets and the examples) -----
+    const ring = Array.from({ length: 41 }, (_, i) => [0.5 + 0.5 * Math.cos((i / 40) * 2 * Math.PI), 0.5 + 0.5 * Math.sin((i / 40) * 2 * Math.PI)]);
+    const SHAPES = {
+      house: [[[0.1, 0.45], [0.1, 1], [0.9, 1], [0.9, 0.45], [0.1, 0.45]], [[0, 0.48], [0.5, 0], [1, 0.48]],
+              [[0.38, 1], [0.38, 0.7], [0.62, 0.7], [0.62, 1]]],
+      square: [[[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]],
+      triangle: [[[0.5, 0], [1, 1], [0, 1], [0.5, 0]]],
+      circle: [ring],
+      letter: [[[0, 1], [0.5, 0], [1, 1]], [[0.2, 0.62], [0.8, 0.62]]],
+    };
+    const blank = (c) => { c.fillStyle = "#000"; c.fillRect(0, 0, N, N); };
+    const pen = (c) => { c.strokeStyle = "#fff"; c.lineWidth = 4; c.lineCap = "round"; c.lineJoin = "round"; };
+    function drawShape(c, name, size = 76, aspect = 1) {
+      const x = 64 - size / 2, y = 64 - (size * aspect) / 2;
+      blank(c); pen(c);
+      for (const stroke of SHAPES[name]) {
+        c.beginPath();
+        stroke.forEach(([u, v], i) => (i ? c.lineTo : c.moveTo).call(c, x + u * size, y + v * size * aspect));
+        c.stroke();
+      }
+    }
+    const grayOf = (c) => {
+      const px = c.getImageData(0, 0, N, N).data, g = new Float32Array(N * N);
+      for (let p = 0; p < N * N; p++) g[p] = px[4 * p] / 255;
+      return g;
+    };
+
+    // Each object cell learns from a few examples of its shape (different sizes and
+    // proportions) and keeps their average description.
+    const scratch = document.createElement("canvas");
+    scratch.width = scratch.height = N;
+    const sctx = scratch.getContext("2d", { willReadFrequently: true });
+    const EXAMPLES = [[70, 0.8], [70, 1], [60, 1.25], [90, 1], [45, 1]];
+    const prototypes = OBJECTS.map(([key]) => {
+      const seen = EXAMPLES.map(([size, aspect]) => { drawShape(sctx, key, size, aspect); return analyze(grayOf(sctx)).shape; });
+      return seen[0].map((_, i) => seen.reduce((sum, v) => sum + v[i], 0) / seen.length);
+    });
+
+    // ----- Rendering -----
     function paintOrientations(ctx, maps, n, scale) {
       const img = ctx.createImageData(n, n);
       for (let p = 0; p < n * n; p++) {
@@ -258,40 +453,29 @@ plt.show()</code></pre>
       return stops[i].map((c, j) => c + (stops[i + 1][j] - c) * f);
     }
 
+    const objectsEl = document.getElementById("objects");
+    objectsEl.innerHTML = OBJECTS.map(([key, label]) =>
+      `<div class="row" data-obj="${key}"><span>${label}</span><div class="bar"><span></span></div><span class="readout">0%</span></div>`).join("");
+    const rows = [...objectsEl.querySelectorAll(".row")];
+
     function update() {
-      const px = ictx.getImageData(0, 0, N, N).data;
-      const gray = new Float32Array(N * N);
-      for (let p = 0; p < N * N; p++) gray[p] = px[4 * p] / 255;
+      const a = analyze(grayOf(ictx));
+      paintOrientations(out[0], a.l1, N, a.max1 * 0.8);
+      paintOrientations(out[1], a.l2, 32, a.max1 * 0.8);
 
-      const l1 = kernels.map((k) => convolveRelu(gray, k));
-      // Competition between angles: each cell is suppressed by the average of its
-      // neighbours tuned to other angles, so only the best-matching angle survives.
-      for (let p = 0; p < N * N; p++) {
-        const mean = (l1[0][p] + l1[1][p] + l1[2][p] + l1[3][p]) / 4;
-        for (let k = 0; k < 4; k++) l1[k][p] = Math.max(0, l1[k][p] - 1.2 * mean);
-      }
-      const max1 = Math.max(1, ...l1.map((m) => m.reduce((a, b) => (b > a ? b : a), 0)));
-      paintOrientations(out[0], l1, N, max1 * 0.8);
-
-      const l2 = l1.map((m) => maxPool(m, N, 4));
-      paintOrientations(out[1], l2, 32, max1 * 0.8);
-
-      // A corner cell needs two different angles in the same small region.
-      const d = l2;
-      const corners = new Float32Array(32 * 32);
-      for (let p = 0; p < 32 * 32; p++) {
-        // Strongest pair of two different angles present in this cell.
-        const v = [d[0][p], d[1][p], d[2][p], d[3][p]].sort((a, b) => b - a);
-        corners[p] = v[1];
-      }
-      const l3 = maxPool(corners, 32, 2);
-      const max3 = Math.max(max1 * 0.25, ...l3);
+      const max3 = Math.max(a.max1 * 0.25, ...a.l3);
       const img = out[2].createImageData(16, 16);
-      for (let p = 0; p < 256; p++) {
-        const [r, g, b] = heat(l3[p] / max3);
-        img.data.set([r, g, b, 255], 4 * p);
-      }
+      for (let p = 0; p < 256; p++) img.data.set([...heat(a.l3[p] / max3), 255], 4 * p);
       out[2].putImageData(img, 0, 0);
+
+      // Object cells fire in proportion to how well the shape matches their example.
+      const act = prototypes.map((proto) => (a.shape ? Math.max(0, (cosine(a.shape, proto) - 0.3) / 0.7) : 0));
+      const best = act.indexOf(Math.max(...act));
+      rows.forEach((row, i) => {
+        row.querySelector(".bar span").style.width = `${Math.round(act[i] * 100)}%`;
+        row.querySelector(".readout").textContent = `${Math.round(act[i] * 100)}%`;
+        row.classList.toggle("win", a.shape !== null && i === best && act[i] > 0.3);
+      });
     }
 
     let pending = false;
@@ -299,39 +483,13 @@ plt.show()</code></pre>
       if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; update(); }); }
     };
 
-    // ----- Drawing -----
-    ictx.lineCap = "round";
-    ictx.lineJoin = "round";
-    const clear = () => { ictx.fillStyle = "#000"; ictx.fillRect(0, 0, N, N); };
-    const pen = () => { ictx.strokeStyle = "#fff"; ictx.lineWidth = 4; };
-
-    const shapes = {
-      house() {
-        ictx.beginPath();
-        ictx.moveTo(36, 62); ictx.lineTo(36, 100); ictx.lineTo(92, 100); ictx.lineTo(92, 62); ictx.closePath();
-        ictx.moveTo(30, 64); ictx.lineTo(64, 30); ictx.lineTo(98, 64);
-        ictx.moveTo(56, 100); ictx.lineTo(56, 78); ictx.lineTo(72, 78); ictx.lineTo(72, 100);
-        ictx.stroke();
-      },
-      triangle() {
-        ictx.beginPath();
-        ictx.moveTo(64, 24); ictx.lineTo(104, 100); ictx.lineTo(24, 100); ictx.closePath();
-        ictx.stroke();
-      },
-      circle() {
-        ictx.beginPath(); ictx.arc(64, 64, 36, 0, 2 * Math.PI); ictx.stroke();
-      },
-      letter() {
-        ictx.beginPath();
-        ictx.moveTo(34, 104); ictx.lineTo(64, 24); ictx.lineTo(94, 104);
-        ictx.moveTo(46, 74); ictx.lineTo(82, 74);
-        ictx.stroke();
-      },
-    };
+    // ----- Interaction -----
+    const highlight = (name) =>
+      document.querySelectorAll("[data-shape]").forEach((b) => b.classList.toggle("ghost", b.dataset.shape !== name));
 
     function showShape(name) {
-      clear(); pen(); shapes[name]();
-      document.querySelectorAll("[data-shape]").forEach((b) => b.classList.toggle("ghost", b.dataset.shape !== name));
+      drawShape(ictx, name);
+      highlight(name);
       schedule();
     }
 
@@ -343,13 +501,12 @@ plt.show()</code></pre>
     input.style.touchAction = "none";
     input.style.cursor = "crosshair";
     input.addEventListener("pointerdown", (e) => {
-      drawing = true; last = pos(e); input.setPointerCapture(e.pointerId);
-      document.querySelectorAll("[data-shape]").forEach((b) => b.classList.add("ghost"));
+      drawing = true; last = pos(e); input.setPointerCapture(e.pointerId); highlight(null);
     });
     input.addEventListener("pointermove", (e) => {
       if (!drawing) return;
       const p = pos(e);
-      pen(); ictx.beginPath(); ictx.moveTo(...last); ictx.lineTo(...p); ictx.stroke();
+      pen(ictx); ictx.beginPath(); ictx.moveTo(...last); ictx.lineTo(...p); ictx.stroke();
       last = p; schedule();
     });
     const stop = () => { drawing = false; };
@@ -357,10 +514,7 @@ plt.show()</code></pre>
     input.addEventListener("pointercancel", stop);
 
     document.querySelectorAll("[data-shape]").forEach((b) => b.addEventListener("click", () => showShape(b.dataset.shape)));
-    document.getElementById("clear").addEventListener("click", () => {
-      clear(); schedule();
-      document.querySelectorAll("[data-shape]").forEach((b) => b.classList.add("ghost"));
-    });
+    document.getElementById("clear").addEventListener("click", () => { blank(ictx); highlight(null); schedule(); });
 
     showShape("house");
   })();

@@ -420,3 +420,19 @@ footer {
 .sim .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.85rem; color: #cfc8ef; }
 .sim .legend i { display: inline-block; width: 18px; height: 4px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
 .sim button.ghost { background: transparent; border: 1px solid #5b4d8f; }
+.object-cells { margin-top: 14px; display: grid; gap: 6px; }
+.object-cells .row { display: grid; grid-template-columns: 90px 1fr 44px; align-items: center; gap: 10px; font-size: 0.9rem; }
+.object-cells .bar { height: 12px; border-radius: 6px; background: #241d40; overflow: hidden; }
+.object-cells .bar span { display: block; height: 100%; width: 0; border-radius: 6px;
+  background: linear-gradient(90deg, #7c5cff, #e5604a); transition: width 0.25s ease; }
+.object-cells .row.win { color: #fff; font-weight: 600; }
+.object-cells .row.win .bar span { background: linear-gradient(90deg, #ff7a8a, #ffc857); box-shadow: 0 0 10px #ff9a7a; }
+.compare { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem; }
+.compare th, .compare td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.compare th { background: var(--accent-soft); color: var(--accent); }
+
+/* Figures inside a post */
+.post-figure { margin: 20px 0; }
+.post-figure img { width: 100%; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg); }
+.post-figure.narrow { max-width: 520px; }
+.post-figure figcaption { font-size: 0.9rem; color: var(--muted); margin-top: 6px; }
