@@ -19,6 +19,13 @@ const SITE = {
 // The post file goes in the notes/ folder (copy notes/_template.html to start).
 const NOTES = [
   {
+    href: "notes/2026-10-26-visual-hierarchy.html",
+    date: "26 Oct 2026",
+    title: "From edges to objects: how the brain sees",
+    summary: "Draw a shape and watch it climb a tiny brain-like hierarchy: edges, pooled edges, corners — the idea behind CNNs.",
+    tags: ["Simulation", "Vision"],
+  },
+  {
     href: "notes/2026-10-15-synchrony.html",
     date: "15 Oct 2026",
     title: "How do neurons fall into rhythm?",

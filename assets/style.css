@@ -407,3 +407,16 @@ footer {
 }
 @media (max-width: 640px) { .sim-grid { grid-template-columns: 1fr; } }
 .sim-caption { font-size: 0.85rem; color: #b9b2d9; margin: 6px 0 0; }
+
+/* Four-panel demo (e.g. visual hierarchy note) */
+.sim-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+@media (max-width: 720px) { .sim-grid-4 { grid-template-columns: repeat(2, 1fr); } }
+.sim-grid-4 canvas { aspect-ratio: 1; image-rendering: pixelated; background: #000; }
+.sim-grid-4 .panel-title { font-size: 0.85rem; font-weight: 600; margin: 0 0 4px; color: #e9e5ff; }
+.sim .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.85rem; color: #cfc8ef; }
+.sim .legend i { display: inline-block; width: 18px; height: 4px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+.sim button.ghost { background: transparent; border: 1px solid #5b4d8f; }
