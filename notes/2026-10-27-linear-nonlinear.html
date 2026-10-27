@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Linear or nonlinear? Solving equations in the brain · Fatih Onay</title>
+  <meta name="description" content="Why EEG signals add up linearly but neurons don't, and how a computer finds solutions that algebra can't: an interactive introduction to linear and nonlinear systems.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css?v=20261027">
+</head>
+<body>
+  <div id="site-header"></div>
+  <script src="../assets/site.js?v=20261027" data-root="../"></script>
+
+  <main class="container">
+    <article class="post">
+      <p><a href="../notes.html">← All Lab Notes</a></p>
+      <h1>Linear or nonlinear? Solving equations in the brain</h1>
+      <p class="post-meta">27 October 2026 · Simulation · Modelling</p>
+
+      <p>
+        Every model in neuroscience is a set of equations. An equation connects
+        what we <strong>know</strong> (what we measured, or the input we gave) to
+        what we <strong>want to find</strong> (the brain activity behind it).
+        Solving the equation means finding the values that make the relationship
+        true.
+      </p>
+      <p>
+        Some of these equations are <strong>linear</strong>, and some are
+        <strong>nonlinear</strong>. The difference decides how many answers there
+        can be, and whether we can find them with algebra or need a computer
+        to search for them. Two everyday neuroscience examples show the difference.
+      </p>
+
+      <h2>A linear example: what an EEG electrode hears</h2>
+      <p>
+        An EEG electrode does not record one brain area. It records a
+        <strong>weighted sum</strong> of every active source, because electric
+        fields spread through the head (volume conduction). The physics of these
+        fields is linear: if a source becomes twice as strong, its contribution
+        at the electrode doubles, and the contributions of different sources
+        simply add up.
+      </p>
+      <p>
+        Suppose two sources, <em>s</em><sub>1</sub> (frontal) and
+        <em>s</em><sub>2</sub> (parietal), reach two electrodes with different
+        weights:
+      </p>
+<pre><code>Fz = 0.8·s1 + 0.3·s2 = 9.5 µV
+Pz = 0.2·s1 + 0.6·s2 = 5.0 µV</code></pre>
+      <p>
+        Two equations, two unknowns, and the unknowns appear only multiplied by
+        numbers and added: a <strong>linear system</strong>. Each equation is a
+        straight line in the (<em>s</em><sub>1</sub>, <em>s</em><sub>2</sub>)
+        plane, and the answer is where the lines cross:
+        <em>s</em><sub>1</sub> = 10 µV, <em>s</em><sub>2</sub> = 5 µV. Linear
+        systems are friendly: there is exactly one crossing, none (parallel
+        lines), or infinitely many (the same line), and a computer finds it
+        directly.
+      </p>
+
+      <h2>A nonlinear example: a neuron population that excites itself</h2>
+      <p>
+        Neurons are not linear. Below a threshold they barely fire; above it their
+        firing rises quickly; and it can't rise forever, so it <strong>saturates</strong>.
+        The firing rate follows an S-shaped curve: doubling the input does not
+        double the output.
+      </p>
+      <p>
+        Now let a population of neurons excite itself, as cortical circuits do.
+        Its activity <em>r</em> (from 0 = silent to 1 = maximal) feeds back as part of
+        its own input. It settles where the activity it produces equals the activity it
+        receives (a classic model by
+        <a href="https://doi.org/10.1016/S0006-3495(72)86068-5">Wilson and Cowan, 1972</a>):
+      </p>
+<pre><code>r = F(w·r + I)
+
+F: S-shaped firing curve   w: self-excitation   I: outside input</code></pre>
+      <p>
+        <em>r</em> appears on both sides, inside the curved function <em>F</em>.
+        There is no algebra trick that isolates it. But we can draw both sides and
+        look for where they meet.
+      </p>
+
+      <div class="sim" id="sim">
+        <canvas id="plot" height="380" aria-label="Line y = r and the S-shaped firing curve; their crossings are the solutions"></canvas>
+        <p class="sim-caption">
+          <span style="color:#5ee6c8">Teal line</span>: activity the population has (y = r).
+          <span style="color:#f08aa8">Curve</span>: activity it produces, F(w·r + I).
+          Every crossing is a solution. Filled dots are stable, hollow dots are unstable.
+          Click inside the plot to start the population at that activity and watch where it settles.
+        </p>
+        <div class="controls">
+          <label>Self-excitation <em>w</em>
+            <input type="range" id="w" min="0" max="12" step="0.1" value="3">
+            <span class="readout" id="wval">3.0</span>
+          </label>
+          <label>Input <em>I</em>
+            <input type="range" id="I" min="-8" max="2" step="0.1" value="-1">
+            <span class="readout" id="Ival">−1.0</span>
+          </label>
+          <label><input type="checkbox" id="linear"> Make the neuron linear</label>
+        </div>
+        <div class="controls">
+          <span>Solutions: <span class="readout" id="count">1</span></span>
+          <button id="solve">Watch the computer solve it</button>
+        </div>
+        <p class="sim-caption" id="solveLog" aria-live="polite"></p>
+      </div>
+
+      <div class="callout">
+        <strong>Try this:</strong> slowly raise the self-excitation <em>w</em> from 3
+        to 8 and lower the input <em>I</em> to about −3. A single crossing splits into
+        <strong>three</strong>. Now click near the bottom-left of the plot, then near the
+        top-right: the population stays either almost silent or highly active, depending
+        only on where it started. That is <em>memory</em>. Finally, tick "Make the neuron
+        linear": now the two lines cross once at most (or, in one special case, lie on top
+        of each other). Two separate stable states are impossible.
+      </div>
+
+      <h2>Why three solutions matter</h2>
+      <p>
+        With strong self-excitation the population has <strong>two stable
+        states</strong>: a quiet one and an active one, separated by an unstable
+        point in between. A brief input can push it from quiet to active, and it
+        <em>stays</em> active after the input is gone, because it keeps exciting
+        itself. Persistent activity of this kind is a leading model of how
+        prefrontal cortex holds an item in <strong>working memory</strong> for a few
+        seconds. A linear system can never do this: with straight lines, there is
+        at most one crossing.
+      </p>
+
+      <h2>How does a computer find a solution it can't write down?</h2>
+      <p>
+        Move everything to one side, so the question becomes "where is this
+        function zero?":
+      </p>
+<pre><code>f(r) = F(w·r + I) − r = 0</code></pre>
+      <p>
+        The button in the demo runs the simplest search, <strong>bisection</strong>.
+        Find two points where <em>f</em> has opposite signs, so a zero must lie
+        between them. Check the middle, keep the half where the sign still changes,
+        and repeat. Every step halves the interval; after 20 steps the answer is
+        accurate to about one millionth. MATLAB's <code>fzero</code> and Python's
+        <code>brentq</code> use smarter versions of the same idea.
+      </p>
+
+      <h2>Try it in Python</h2>
+<pre><code>import numpy as np
+from scipy.optimize import brentq
+
+# Linear: EEG mixing, two electrodes and two sources
+A = np.array([[0.8, 0.3],      # Fz weights
+              [0.2, 0.6]])     # Pz weights
+b = np.array([9.5, 5.0])       # measured µV
+print(np.linalg.solve(A, b))   # [10.  5.]  (MATLAB: A\b)
+
+# Nonlinear: where does the self-exciting population settle?
+F = lambda u: 1 / (1 + np.exp(-u))       # S-shaped firing curve
+w, I = 8, -3
+f = lambda r: F(w * r + I) - r
+
+r = np.linspace(0, 1, 1001)               # look for sign changes first...
+brackets = np.where(np.diff(np.sign(f(r))))[0]
+roots = [brentq(f, r[i], r[i + 1]) for i in brackets]   # ...then zoom in (MATLAB: fzero)
+print(np.round(roots, 3))                 # [0.099 0.207 0.993]</code></pre>
+      <table class="compare">
+        <tr><th>Problem</th><th>Neuroscience example</th><th>Python</th><th>MATLAB</th></tr>
+        <tr><td>Linear system</td><td>Unmixing EEG sources</td><td><code>np.linalg.solve</code></td><td><code>A\b</code></td></tr>
+        <tr><td>One nonlinear equation</td><td>Steady state of one population</td><td><code>scipy.optimize.brentq</code></td><td><code>fzero</code></td></tr>
+        <tr><td>Several nonlinear equations</td><td>Excitatory + inhibitory populations</td><td><code>scipy.optimize.fsolve</code></td><td><code>fsolve</code></td></tr>
+      </table>
+
+      <h2>Why this matters for EEG</h2>
+      <p>
+        Both kinds of problem meet in real EEG research. Finding where a signal
+        comes from in the brain (source localisation) is a <em>linear</em> problem,
+        but with thousands of possible sources and only a few dozen electrodes it has
+        infinitely many solutions, so we must add assumptions to pick one. Models of
+        the rhythms themselves, such as the synchrony in the
+        <a href="2026-10-15-synchrony.html">first Lab Note</a>, are <em>nonlinear</em>,
+        which is exactly what lets them switch between states, oscillate, or, in
+        epilepsy, tip into a seizure.
+      </p>
+      <p>
+        A computer can calculate an answer, but a scientist must decide whether it
+        is meaningful: which solution is stable, and which one the brain actually uses.
+      </p>
+      <p class="post-meta" style="margin-top:24px">
+        Note: the population model is simplified to show the principle; real models
+        include inhibitory neurons and time constants, and fit their parameters to data.
+      </p>
+    </article>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+  (() => {
+    const canvas = document.getElementById("plot");
+    const wIn = document.getElementById("w"), IIn = document.getElementById("I");
+    const linearIn = document.getElementById("linear");
+    const log = document.getElementById("solveLog");
+    const fmt = (v) => (v < 0 ? "−" : "") + Math.abs(v).toFixed(1);
+
+    const sigmoid = (u) => 1 / (1 + Math.exp(-u));
+    // The "linear neuron": same slope as the sigmoid at its midpoint, but no threshold or ceiling.
+    const F = (u) => (linearIn.checked ? 0.5 + u / 4 : sigmoid(u));
+    const params = () => ({ w: Number(wIn.value), I: Number(IIn.value) });
+    const f = (r, p) => F(p.w * r + p.I) - r;
+
+    // All solutions in [0, 1]: scan for sign changes, then refine each by bisection.
+    function bisect(a, b, p, steps = 50, record) {
+      let fa = f(a, p);
+      for (let k = 0; k < steps; k++) {
+        const m = (a + b) / 2, fm = f(m, p);
+        if (record) record.push([a, b, m, fm]);
+        if (fm === 0) return m;
+        if (Math.sign(fm) === Math.sign(fa)) { a = m; fa = fm; } else { b = m; }
+      }
+      return (a + b) / 2;
+    }
+    function solutions(p) {
+      // A linear neuron lying exactly on the line: every r is a solution.
+      if ([0, 0.25, 0.5, 0.75, 1].every((r) => Math.abs(f(r, p)) < 1e-9)) return "all";
+      const n = 2000, roots = [];
+      let prev = f(0, p);
+      for (let i = 1; i <= n; i++) {
+        const r = i / n, cur = f(r, p);
+        if (prev === 0) roots.push((i - 1) / n);
+        else if (Math.sign(cur) !== Math.sign(prev) && cur !== 0) roots.push(bisect((i - 1) / n, r, p));
+        prev = cur;
+      }
+      if (prev === 0) roots.push(1);
+      // Stable if the curve crosses the line from above (slope of F(w r + I) less than 1).
+      return roots.map((r) => {
+        const h = 1e-5, slope = (F(p.w * (r + h) + p.I) - F(p.w * (r - h) + p.I)) / (2 * h);
+        return { r, stable: slope < 1 };
+      });
+    }
+
+    // ----- Drawing -----
+    let W = 0, H = 0, ctx;
+    const pad = { l: 46, r: 16, t: 14, b: 38 };
+    const X = (r) => pad.l + r * (W - pad.l - pad.r);
+    const Y = (y) => H - pad.b - y * (H - pad.t - pad.b);
+    function fit() {
+      const dpr = window.devicePixelRatio || 1;
+      W = canvas.clientWidth;
+      H = Number(canvas.getAttribute("height"));
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+      canvas.style.height = H + "px";
+      ctx = canvas.getContext("2d");
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    let bracket = null, settle = null;
+    function draw() {
+      const p = params();
+      ctx.clearRect(0, 0, W, H);
+
+      // Axes and grid
+      ctx.strokeStyle = "rgba(255,255,255,0.08)"; ctx.lineWidth = 1;
+      ctx.fillStyle = "#b9b2d9"; ctx.font = "12px Source Sans 3, sans-serif";
+      for (let v = 0; v <= 1.001; v += 0.25) {
+        ctx.beginPath(); ctx.moveTo(X(v), Y(0)); ctx.lineTo(X(v), Y(1)); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(X(0), Y(v)); ctx.lineTo(X(1), Y(v)); ctx.stroke();
+        ctx.textAlign = "center"; ctx.fillText(v.toFixed(2), X(v), H - pad.b + 16);
+        ctx.textAlign = "right"; ctx.fillText(v.toFixed(2), pad.l - 6, Y(v) + 4);
+      }
+      ctx.textAlign = "center"; ctx.fillText("population activity r", (X(0) + X(1)) / 2, H - 6);
+
+      // Bisection bracket being searched
+      if (bracket) {
+        ctx.fillStyle = "rgba(255, 200, 87, 0.18)";
+        ctx.fillRect(X(bracket[0]), Y(1), X(bracket[1]) - X(bracket[0]), Y(0) - Y(1));
+      }
+
+      // y = r
+      ctx.strokeStyle = "#5ee6c8"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(1), Y(1)); ctx.stroke();
+
+      // F(w r + I), drawn with a glowing gradient
+      const grad = ctx.createLinearGradient(X(0), 0, X(1), 0);
+      grad.addColorStop(0, "#7c5cff"); grad.addColorStop(1, "#ff7a8a");
+      ctx.save();
+      ctx.beginPath(); ctx.rect(X(0), Y(1) - 2, X(1) - X(0), Y(0) - Y(1) + 4); ctx.clip();
+      ctx.strokeStyle = grad; ctx.lineWidth = 3; ctx.shadowColor = "#c86bff"; ctx.shadowBlur = 10;
+      ctx.beginPath();
+      for (let i = 0; i <= 300; i++) {
+        const r = i / 300, y = F(p.w * r + p.I);
+        i ? ctx.lineTo(X(r), Y(y)) : ctx.moveTo(X(r), Y(y));
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      // Solutions
+      const found = solutions(p);
+      if (found === "all") {
+        document.getElementById("count").textContent = "infinitely many (the lines overlap)";
+        return;
+      }
+      const sols = found;
+      sols.forEach(({ r, stable }) => {
+        ctx.beginPath(); ctx.arc(X(r), Y(r), 7, 0, 2 * Math.PI);
+        ctx.lineWidth = 2.5; ctx.strokeStyle = "#ffd678";
+        if (stable) { ctx.fillStyle = "#ffd678"; ctx.fill(); } else { ctx.fillStyle = "#120f22"; ctx.fill(); }
+        ctx.stroke();
+      });
+      document.getElementById("count").textContent =
+        sols.length === 0 ? "none" : sols.length + (sols.length === 1 ? "" : " (" + sols.filter((s) => s.stable).length + " stable)");
+
+      // A population started by a click, settling over time
+      if (settle) {
+        ctx.beginPath(); ctx.arc(X(settle.r), Y(settle.r), 6, 0, 2 * Math.PI);
+        ctx.fillStyle = "#fff"; ctx.shadowColor = "#fff"; ctx.shadowBlur = 12; ctx.fill(); ctx.shadowBlur = 0;
+      }
+    }
+
+    // Click: start the population at that activity; it evolves as dr/dt = −r + F(w r + I).
+    let timer = null;
+    canvas.addEventListener("click", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const r0 = (e.clientX - rect.left - pad.l) / (W - pad.l - pad.r);
+      if (r0 < 0 || r0 > 1) return;
+      settle = { r: r0 };
+      cancelAnimationFrame(timer);
+      const step = () => {
+        const p = params();
+        const dr = -settle.r + F(p.w * settle.r + p.I);
+        settle.r = Math.min(1, Math.max(0, settle.r + 0.12 * dr));
+        draw();
+        if (Math.abs(dr) > 3e-4) timer = requestAnimationFrame(step);
+        else log.textContent = `The population settled at r = ${settle.r.toFixed(3)}.`;
+      };
+      log.textContent = `Started at r = ${r0.toFixed(2)}…`;
+      step();
+    });
+
+    // Button: animate bisection on the first crossing.
+    document.getElementById("solve").addEventListener("click", () => {
+      const p = params();
+      const sols = solutions(p);
+      if (sols === "all") { log.textContent = "Every value of r is a solution here: nothing to search for."; return; }
+      if (!sols.length) { log.textContent = "No crossing to find with these settings."; return; }
+      // Bracket the first solution generously, as a user would by looking at the plot.
+      const target = sols[0].r;
+      let a = Math.max(0, target - 0.3), b = Math.min(1, target + 0.3);
+      const others = sols.slice(1).map((s) => s.r);
+      others.forEach((o) => { if (o > target && o < b) b = (target + o) / 2; });
+      if (Math.sign(f(a, p)) === Math.sign(f(b, p))) { a = Math.max(0, target - 0.01); b = Math.min(1, target + 0.01); }
+      const steps = [];
+      bisect(a, b, p, 20, steps);
+      let k = 0;
+      settle = null;
+      const tick = () => {
+        const [lo, hi, m, fm] = steps[k];
+        bracket = [lo, hi];
+        draw();
+        log.textContent = `Step ${k + 1}: the solution lies between ${lo.toFixed(4)} and ${hi.toFixed(4)} ` +
+          `(f at the midpoint = ${fm.toExponential(1)})`;
+        k++;
+        if (k < steps.length) setTimeout(tick, k < 6 ? 450 : 200);
+        else setTimeout(() => { bracket = null; draw();
+          log.textContent = `Found r ≈ ${((lo + hi) / 2).toFixed(5)} after ${steps.length} halvings. ` +
+            `Each step halves the interval: ${(steps[0][1] - steps[0][0]).toFixed(2)} → ${(hi - lo).toExponential(0)}.`; }, 600);
+      };
+      tick();
+    });
+
+    const onChange = () => {
+      document.getElementById("wval").textContent = Number(wIn.value).toFixed(1);
+      document.getElementById("Ival").textContent = fmt(Number(IIn.value));
+      bracket = null;
+      draw();
+    };
+    [wIn, IIn, linearIn].forEach((el) => el.addEventListener("input", onChange));
+    window.addEventListener("resize", () => { fit(); draw(); });
+    fit(); onChange();
+  })();
+  </script>
+</body>
+</html>

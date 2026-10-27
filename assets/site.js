@@ -20,6 +20,13 @@ const SITE = {
 // The post file goes in the notes/ folder (copy notes/_template.html to start).
 const NOTES = [
   {
+    href: "notes/2026-10-27-linear-nonlinear.html",
+    date: "27 Oct 2026",
+    title: "Linear or nonlinear? Solving equations in the brain",
+    summary: "Why EEG signals add up but neurons don't, and how a computer finds answers algebra can't — with a self-exciting neuron population you can steer.",
+    tags: ["Simulation", "Modelling"],
+  },
+  {
     href: "notes/2026-10-26-visual-hierarchy.html",
     date: "26 Oct 2026",
     title: "From edges to objects: how the brain sees",
