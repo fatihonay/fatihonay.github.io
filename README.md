@@ -35,7 +35,12 @@ sed -i '' 's/?v=20261026/?v=20261101/g' *.html notes/*.html
    It then appears on the Lab Notes page and in "Latest Lab Notes" on the Home page.
 3. For an interactive demo, copy the `<div class="sim">` block and the `<script>` from
    `notes/2026-10-15-synchrony.html` and change the model.
-4. Publish:
+4. Link preview and tab icon: add the note to `tools/make_social_cards.py` (its preview image) and to
+   `PAGES` in `tools/add_head_tags.py`, then run:
+   ```bash
+   ~/Desktop/EEG101/VideoEEG-Yao2024/.venv/bin/python tools/make_social_cards.py && python3 tools/add_head_tags.py
+   ```
+5. Publish:
    ```bash
    git add -A && git commit -m "New lab note" && git push
    ```
