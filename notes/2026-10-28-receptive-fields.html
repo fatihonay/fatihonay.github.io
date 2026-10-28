@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Receptive fields: how to read an image from the brain · Fatih Onay</title>
+  <meta name="description" content="What a receptive field is, how to model it with Gabor filters, and how receptive-field models let scientists tell which image a person saw from brain activity alone.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css?v=20261028">
+</head>
+<body>
+  <div id="site-header"></div>
+  <script src="../assets/site.js?v=20261028" data-root="../"></script>
+
+  <main class="container">
+    <article class="post">
+      <p><a href="../notes.html">← All Lab Notes</a></p>
+      <h1>Receptive fields: how to read an image from the brain</h1>
+      <p class="post-meta">28 October 2026 · Simulation · Vision</p>
+
+      <p>
+        <em>Pick a card, any card.</em> In 2008, Kendrick Kay and colleagues in Jack
+        Gallant's lab played a version of this magic trick with the brain. A person in an
+        MRI scanner looked at a photo they had never seen before. Using only the brain
+        activity, a computer then picked out which photo it was from a set of 120, and
+        got it right 92% of the time for one person, where guessing would succeed less
+        than 1% of the time
+        (<a href="https://doi.org/10.1038/nature06713">Kay et al., 2008, <em>Nature</em></a>).
+      </p>
+      <p>
+        The trick works because of one idea: the <strong>receptive field</strong>. If we
+        know what each small piece of visual cortex "looks for", we can predict how it
+        will respond to <em>any</em> image, even a new one.
+      </p>
+
+      <h2>What is a receptive field?</h2>
+      <p>
+        A neuron in visual cortex does not see the whole scene. It responds only to a
+        small patch of the visual field: its receptive field. Within that patch it is
+        also picky about <em>what</em> appears there. A typical V1 neuron prefers
+        stripes or edges at one <strong>orientation</strong> and of one
+        <strong>width</strong> (spatial frequency), as Hubel and Wiesel discovered.
+      </p>
+      <p>
+        So a receptive field answers two questions: <strong>where</strong> does the
+        neuron look, and <strong>what</strong> does it look for? Both can be captured by
+        a <em>Gabor filter</em>, a small striped patch that fades out at the edges. The
+        neuron's response is how well the image under the patch matches the stripes.
+        Using two such filters, shifted by a quarter cycle, makes the response depend on
+        the stripes but not on their exact position. This "energy" model behaves like the
+        complex cells from the <a href="2026-10-26-visual-hierarchy.html">previous note</a>.
+      </p>
+
+      <div class="sim" id="sim1">
+        <div class="sim-grid">
+          <div>
+            <canvas id="stim" width="320" height="320" aria-label="Stimulus with the receptive field outlined"></canvas>
+            <p class="sim-caption">Drag the striped patch. The dashed circle is the model neuron's receptive field.</p>
+          </div>
+          <div>
+            <canvas id="tuning" height="320" aria-label="Response meter and tuning curves"></canvas>
+            <p class="sim-caption">Top: the neuron's response right now. Below: how the response changes with orientation and stripe width (the neuron's tuning curves), with the current stimulus marked.</p>
+          </div>
+        </div>
+        <div class="controls">
+          <label>Orientation
+            <input type="range" id="ori" min="0" max="180" step="1" value="100">
+            <span class="readout" id="orival">100°</span>
+          </label>
+          <label>Stripe width
+            <input type="range" id="lam" min="3" max="24" step="0.5" value="14">
+            <span class="readout" id="lamval">14 px</span>
+          </label>
+          <button id="best">Show its favourite stimulus</button>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Try this:</strong> drag the patch into the dashed circle and watch the
+        response rise. Now turn the orientation slowly: the neuron fires strongly only near
+        its favourite angle. Change the stripe width too. Finally, move the patch out of
+        the circle: even the perfect stimulus does nothing outside the receptive field.
+      </div>
+
+      <h2>From one neuron to the whole visual cortex</h2>
+      <p>
+        fMRI does not record single neurons. It measures blood flow in small cubes of
+        brain called <strong>voxels</strong>, each containing hundreds of thousands of
+        neurons. But neighbouring neurons share similar receptive fields, so a whole voxel
+        has a receptive field too, just a broader one. Kay and colleagues showed each
+        person 1,750 natural photos and, for every voxel in visual areas V1, V2 and V3,
+        estimated a receptive-field model of this kind: a set of Gabor filters at different
+        positions, orientations and widths, each with a learned weight.
+      </p>
+      <p>
+        Then came the card trick. People viewed 120 <em>new</em> photos. For every
+        candidate photo, the models predicted the pattern of activity across all voxels.
+        The computer picked the photo whose <strong>predicted pattern</strong> best matched
+        (highest correlation) the <strong>measured pattern</strong>. You can play the same
+        game below with 98 model voxels and 12 images.
+      </p>
+
+      <div class="sim" id="sim2">
+        <p class="panel-title" style="color:#e9e5ff">Candidate images</p>
+        <div class="thumbs" id="thumbs"></div>
+        <canvas id="pattern" height="170" style="margin-top:14px" aria-label="Measured and predicted voxel activity patterns"></canvas>
+        <p class="sim-caption">
+          <span style="color:#fff">White</span>: measured activity of 98 voxels for the hidden image (with noise).
+          <span style="color:#ff9aa8">Pink</span>: the pattern the model predicts for the image the decoder picked.
+        </p>
+        <div class="controls">
+          <label><input type="radio" name="model" value="full" checked> Full receptive-field model</label>
+          <label><input type="radio" name="model" value="retino"> Position-only model</label>
+        </div>
+        <div class="controls">
+          <label>Measurement noise
+            <input type="range" id="noise" min="0" max="4" step="0.1" value="2">
+            <span class="readout" id="noiseval">2.0</span>
+          </label>
+          <button id="trial">Show the brain a hidden image</button>
+          <button id="many" class="ghost">Run 200 trials</button>
+        </div>
+        <p class="sim-caption" id="result" aria-live="polite">Press the button: the page "shows" the model brain a random image, then the decoder guesses which one it was.</p>
+      </div>
+
+      <div class="callout">
+        <strong>Try this:</strong> run 200 trials with the full model, then switch to the
+        <em>position-only</em> model, which knows where each voxel looks but not which
+        orientations and widths it prefers. Accuracy drops sharply. Then raise the noise:
+        both get worse, but the full model always stays ahead.
+      </div>
+
+      <h2>Why "where" is not enough</h2>
+      <p>
+        Early visual cortex is laid out like a map of the visual field (retinotopy), so
+        you might think the trick only needs to know <em>where</em> each voxel looks. Kay
+        and colleagues tested exactly this. A model that captured only each voxel's
+        location and size identified images much less well than the full model with
+        orientation and spatial-frequency tuning. The demo shows the same effect: the
+        <em>what</em> part of the receptive field carries much of the information.
+      </p>
+      <p>
+        The real results were remarkable for fMRI, which is slow and noisy. With 1,000
+        candidate photos, accuracy for the first person was still 82%. Even two months
+        later, on new photos, it was 82% for a set of 120.
+      </p>
+
+      <h2>Try it in Python</h2>
+      <p>The core of a receptive-field model fits in a few lines:</p>
+<pre><code>import numpy as np
+
+def gabor_pair(wavelength, orientation_deg, size=31):
+    """Two Gabor filters a quarter cycle apart (the 'what' of a receptive field)."""
+    r = size // 2
+    y, x = np.mgrid[-r:r + 1, -r:r + 1]
+    theta = np.deg2rad(orientation_deg)
+    across = x * np.cos(theta) + y * np.sin(theta)        # distance across the stripes
+    envelope = np.exp(-(x**2 + y**2) / (2 * (wavelength / 2)**2))
+    even = envelope * np.cos(2 * np.pi * across / wavelength)
+    odd = envelope * np.sin(2 * np.pi * across / wavelength)
+    return even - even.mean(), odd
+
+def rf_response(image, x0, y0, wavelength, orientation_deg):
+    """Energy response of a receptive field centred at (x0, y0) (the 'where')."""
+    even, odd = gabor_pair(wavelength, orientation_deg)
+    r = even.shape[0] // 2
+    patch = image[y0 - r:y0 + r + 1, x0 - r:x0 + r + 1] - image.mean()
+    return np.hypot((patch * even).sum(), (patch * odd).sum())
+
+# A stimulus with stripes at 45 degrees, 8 pixels wide
+y, x = np.mgrid[0:64, 0:64]
+stripes = np.cos(2 * np.pi * (x + y) / np.sqrt(2) / 8)
+for ori in [0, 45, 90, 135]:
+    print(ori, round(rf_response(stripes, 32, 32, 8, ori), 1))   # peaks at 45
+
+# Identification: correlate the measured voxel pattern with each candidate's prediction
+def identify(measured, predicted_patterns):
+    r = [np.corrcoef(measured, p)[0, 1] for p in predicted_patterns]
+    return int(np.argmax(r))</code></pre>
+
+      <h2>Why this matters for EEG</h2>
+      <p>
+        Kay's study is an example of an <strong>encoding model</strong>: describe the
+        stimulus with features, predict the brain response, and test the prediction on data
+        the model has never seen. The same recipe drives a lot of EEG and MEG research. EEG
+        can't resolve small patches of cortex like fMRI, but it follows the brain in
+        milliseconds, so EEG encoding models predict the signal <em>over time</em> from
+        features of sounds, speech or video (as in the
+        <a href="https://doi.org/10.1088/1741-2552/ad2333">video–EEG study by Yao et al., 2024</a>).
+        The better our model of what the brain "looks for", the more we can read from its
+        activity, whether that's for basic science or for brain–computer interfaces.
+      </p>
+      <p class="post-meta" style="margin-top:24px">
+        Note: the demos use 98 simulated voxels, 12 synthetic natural-like images and
+        added noise to show the principle. The real study fitted models to fMRI data from
+        two people and many more voxels, with Gabor filters at many scales and positions.
+      </p>
+    </article>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+  (() => {
+    // ---------- Shared: seeded random numbers and Gabor energy ----------
+    function mulberry32(a) {
+      return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    }
+    const rand = mulberry32(2008);
+    const randn = () => Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());
+    const DEG = Math.PI / 180;
+
+    // Quadrature pair of Gabor filters (wavelength in px, orientation in radians).
+    function gaborPair(lam, ori) {
+      const s = 0.5 * lam, R = Math.ceil(2.5 * s), even = [], odd = [];
+      let mean = 0;
+      for (let y = -R; y <= R; y++) for (let x = -R; x <= R; x++) {
+        const across = x * Math.cos(ori) + y * Math.sin(ori);
+        const env = Math.exp(-(x * x + y * y) / (2 * s * s));
+        even.push(env * Math.cos(2 * Math.PI * across / lam));
+        odd.push(env * Math.sin(2 * Math.PI * across / lam));
+        mean += even[even.length - 1];
+      }
+      mean /= even.length;
+      return { R, even: even.map((v) => v - mean), odd };
+    }
+    // Energy response at (cx, cy) of a stimulus given as a function value(x, y) (already zero-mean).
+    function energy(value, cx, cy, pair) {
+      let e = 0, o = 0, i = 0;
+      for (let y = -pair.R; y <= pair.R; y++) for (let x = -pair.R; x <= pair.R; x++, i++) {
+        const v = value(cx + x, cy + y);
+        e += v * pair.even[i]; o += v * pair.odd[i];
+      }
+      return Math.hypot(e, o);
+    }
+
+    // ---------- Demo 1: one receptive field ----------
+    const N1 = 64;
+    const RF = { x: 40, y: 22, lam: 8, ori: 45 * DEG };          // the model neuron
+    const rfPair = gaborPair(RF.lam, RF.ori);
+    const stim = { x: 20, y: 44 };
+    const oriIn = document.getElementById("ori"), lamIn = document.getElementById("lam");
+    const STIM_SIGMA = 7;
+    const stimValue = (sx, sy, lam, ori) => (x, y) => {
+      const dx = x - sx, dy = y - sy;
+      return Math.exp(-(dx * dx + dy * dy) / (2 * STIM_SIGMA * STIM_SIGMA)) *
+             Math.cos(2 * Math.PI * (dx * Math.cos(ori) + dy * Math.sin(ori)) / lam);
+    };
+    const respond = (sx, sy, lam, ori) => energy(stimValue(sx, sy, lam, ori), RF.x, RF.y, rfPair);
+    const maxResp = respond(RF.x, RF.y, RF.lam, RF.ori);
+
+    const stimCanvas = document.getElementById("stim");
+    const sctx = stimCanvas.getContext("2d");
+    const off = document.createElement("canvas"); off.width = off.height = N1;
+    const octx = off.getContext("2d");
+
+    function drawStim() {
+      const lam = Number(lamIn.value), ori = Number(oriIn.value) * DEG;
+      const img = octx.createImageData(N1, N1), f = stimValue(stim.x, stim.y, lam, ori);
+      for (let y = 0; y < N1; y++) for (let x = 0; x < N1; x++) {
+        const g = 128 + 120 * f(x, y), p = 4 * (y * N1 + x);
+        img.data[p] = g * 0.92; img.data[p + 1] = g * 0.9; img.data[p + 2] = g; img.data[p + 3] = 255;
+      }
+      octx.putImageData(img, 0, 0);
+      const W = stimCanvas.width, k = W / N1;
+      sctx.imageSmoothingEnabled = true;
+      sctx.drawImage(off, 0, 0, W, W);
+      // Receptive field outline
+      sctx.setLineDash([6, 5]); sctx.lineWidth = 2.5; sctx.strokeStyle = "#ff7a8a";
+      sctx.beginPath(); sctx.arc((RF.x + 0.5) * k, (RF.y + 0.5) * k, 2 * 0.5 * RF.lam * k, 0, 2 * Math.PI); sctx.stroke();
+      sctx.setLineDash([]);
+      sctx.fillStyle = "#ff7a8a"; sctx.font = "600 13px Source Sans 3, sans-serif";
+      sctx.fillText("receptive field", (RF.x - 6) * k, (RF.y - 9) * k);
+    }
+
+    const tuneCanvas = document.getElementById("tuning");
+    let tctx, TW, TH;
+    function fitTuning() {
+      const dpr = window.devicePixelRatio || 1;
+      TW = tuneCanvas.clientWidth; TH = Number(tuneCanvas.getAttribute("height"));
+      tuneCanvas.width = Math.round(TW * dpr); tuneCanvas.height = Math.round(TH * dpr);
+      tuneCanvas.style.height = TH + "px";
+      tctx = tuneCanvas.getContext("2d"); tctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    // Tuning curves measured with the stimulus centred on the receptive field.
+    const oriCurve = Array.from({ length: 37 }, (_, i) => respond(RF.x, RF.y, RF.lam, i * 5 * DEG) / maxResp);
+    const lamGrid = Array.from({ length: 43 }, (_, i) => 3 + i * 0.5);
+    const lamCurve = lamGrid.map((l) => respond(RF.x, RF.y, l, RF.ori) / maxResp);
+
+    function drawTuning() {
+      const lam = Number(lamIn.value), oriDeg = Number(oriIn.value);
+      const r = respond(stim.x, stim.y, lam, oriDeg * DEG) / maxResp;
+      tctx.clearRect(0, 0, TW, TH);
+      tctx.font = "12px Source Sans 3, sans-serif"; tctx.fillStyle = "#cfc8ef";
+      // Response meter
+      tctx.fillText("Response", 0, 14);
+      tctx.fillStyle = "#241d40"; tctx.fillRect(0, 22, TW, 16);
+      const g = tctx.createLinearGradient(0, 0, TW, 0); g.addColorStop(0, "#7c5cff"); g.addColorStop(1, "#ff7a8a");
+      tctx.fillStyle = g; tctx.fillRect(0, 22, TW * Math.min(1, r), 16);
+      tctx.fillStyle = "#fff"; tctx.fillText(`${Math.round(r * 100)}% of maximum`, 6, 34);
+
+      const plot = (x0, y0, w, h, xs, ys, xCur, label, xFmt) => {
+        tctx.strokeStyle = "rgba(255,255,255,0.15)"; tctx.lineWidth = 1;
+        tctx.beginPath(); tctx.moveTo(x0, y0); tctx.lineTo(x0, y0 + h); tctx.lineTo(x0 + w, y0 + h); tctx.stroke();
+        const xmin = xs[0], xmax = xs[xs.length - 1], X = (v) => x0 + (v - xmin) / (xmax - xmin) * w;
+        tctx.strokeStyle = "#5ee6c8"; tctx.lineWidth = 2.2; tctx.beginPath();
+        xs.forEach((v, i) => (i ? tctx.lineTo(X(v), y0 + h - ys[i] * h) : tctx.moveTo(X(v), y0 + h - ys[i] * h)));
+        tctx.stroke();
+        tctx.strokeStyle = "#ffd678"; tctx.setLineDash([4, 4]); tctx.beginPath();
+        tctx.moveTo(X(xCur), y0); tctx.lineTo(X(xCur), y0 + h); tctx.stroke(); tctx.setLineDash([]);
+        tctx.fillStyle = "#cfc8ef"; tctx.fillText(label, x0, y0 - 6);
+        tctx.fillStyle = "#8e86b3";
+        tctx.fillText(xFmt(xmin), x0, y0 + h + 14);
+        const t = xFmt(xmax); tctx.fillText(t, x0 + w - tctx.measureText(t).width, y0 + h + 14);
+      };
+      const h = (TH - 110) / 2;
+      plot(4, 70, TW - 8, h, oriCurve.map((_, i) => i * 5), oriCurve, oriDeg, "Orientation tuning", (v) => v + "°");
+      plot(4, 70 + h + 40, TW - 8, h, lamGrid, lamCurve, lam, "Stripe-width tuning", (v) => v + " px");
+    }
+
+    function update1() {
+      document.getElementById("orival").textContent = oriIn.value + "°";
+      document.getElementById("lamval").textContent = lamIn.value + " px";
+      drawStim(); drawTuning();
+    }
+    let dragging = false;
+    const toStim = (e) => {
+      const r = stimCanvas.getBoundingClientRect();
+      stim.x = Math.max(0, Math.min(N1 - 1, ((e.clientX - r.left) / r.width) * N1));
+      stim.y = Math.max(0, Math.min(N1 - 1, ((e.clientY - r.top) / r.height) * N1));
+      update1();
+    };
+    stimCanvas.style.touchAction = "none"; stimCanvas.style.cursor = "grab";
+    stimCanvas.addEventListener("pointerdown", (e) => { dragging = true; stimCanvas.setPointerCapture(e.pointerId); toStim(e); });
+    stimCanvas.addEventListener("pointermove", (e) => dragging && toStim(e));
+    stimCanvas.addEventListener("pointerup", () => { dragging = false; });
+    [oriIn, lamIn].forEach((el) => el.addEventListener("input", update1));
+    document.getElementById("best").addEventListener("click", () => {
+      stim.x = RF.x; stim.y = RF.y; oriIn.value = 45; lamIn.value = 8; update1();
+    });
+    window.addEventListener("resize", () => { fitTuning(); update1(); });
+    fitTuning(); update1();
+
+    // ---------- Demo 2: identifying the image from voxel activity ----------
+    const N = 64, NIMG = 12;
+    function makeImage() {
+      const img = new Float32Array(N * N);
+      const theta0 = rand() * Math.PI, spread = 1 / Math.sqrt(0.5 + rand() * 2.5);
+      for (let c = 0; c < 80; c++) {
+        const f = (1.5 + rand() * 10.5) / N;
+        const th = rand() < 0.7 ? theta0 + spread * randn() : rand() * Math.PI;
+        const ph = rand() * 2 * Math.PI, cs = Math.cos(th), sn = Math.sin(th), a = 1 / f;
+        for (let y = 0; y < N; y++) for (let x = 0; x < N; x++)
+          img[y * N + x] += a * Math.cos(2 * Math.PI * f * (x * cs + y * sn) + ph);
+      }
+      for (let b = 0; b < 4; b++) {                    // a few 'objects'
+        const cx = 8 + rand() * 48, cy = 8 + rand() * 48, s = 3 + rand() * 5, sign = rand() < 0.5 ? -40 : 40;
+        for (let y = 0; y < N; y++) for (let x = 0; x < N; x++)
+          img[y * N + x] += sign * Math.exp(-((x - cx) ** 2 + (y - cy) ** 2) / (2 * s * s));
+      }
+      let lo = Infinity, hi = -Infinity;
+      img.forEach((v) => { lo = Math.min(lo, v); hi = Math.max(hi, v); });
+      return img.map((v) => (v - lo) / (hi - lo));
+    }
+    const images = Array.from({ length: NIMG }, makeImage);
+
+    // Model voxels: a 7x7 grid of positions, two voxels each, with random preferred orientation and width.
+    const LAMBDAS = [6, 12], ORIS = [0, 45, 90, 135].map((d) => d * DEG);
+    const pairs = LAMBDAS.map((l) => ORIS.map((o) => gaborPair(l, o)));
+    const grid = Array.from({ length: 7 }, (_, i) => Math.round(8 + i * 47 / 6));
+    const voxels = [];
+    grid.forEach((x) => grid.forEach((y) => { for (let k = 0; k < 2; k++)
+      voxels.push({ x, y, l: Math.floor(rand() * 2), o: Math.floor(rand() * 4) }); }));
+
+    const pixel = (img, mean) => (x, y) => (x < 0 || y < 0 || x >= N || y >= N ? 0 : img[y * N + x] - mean);
+    const full = [], retino = [];
+    images.forEach((img) => {
+      const mean = img.reduce((a, b) => a + b, 0) / img.length, val = pixel(img, mean);
+      full.push(voxels.map((v) => energy(val, v.x, v.y, pairs[v.l][v.o])));
+      // Position-only model: same location and size, but no preference for orientation or width.
+      retino.push(voxels.map((v) => pairs.flat().reduce((s, p) => s + energy(val, v.x, v.y, p), 0)));
+    });
+    const voxelSD = voxels.map((_, j) => {
+      const col = full.map((r) => r[j]), m = col.reduce((a, b) => a + b, 0) / col.length;
+      return Math.sqrt(col.reduce((a, b) => a + (b - m) ** 2, 0) / col.length);
+    });
+
+    const corr = (a, b) => {
+      const n = a.length, ma = a.reduce((s, v) => s + v, 0) / n, mb = b.reduce((s, v) => s + v, 0) / n;
+      let sab = 0, saa = 0, sbb = 0;
+      for (let i = 0; i < n; i++) { const da = a[i] - ma, db = b[i] - mb; sab += da * db; saa += da * da; sbb += db * db; }
+      return sab / Math.sqrt(saa * sbb);
+    };
+    const model = () => document.querySelector('input[name="model"]:checked').value;
+    const noiseIn = document.getElementById("noise");
+    const measure = (k) => full[k].map((v, j) => v + Number(noiseIn.value) * voxelSD[j] * randn());
+    function decode(measured) {
+      const P = model() === "full" ? full : retino;
+      const r = P.map((p) => corr(measured, p));
+      return { r, pick: r.indexOf(Math.max(...r)) };
+    }
+
+    // Thumbnails
+    const thumbs = document.getElementById("thumbs");
+    const thumbEls = images.map((img, i) => {
+      const d = document.createElement("div"); d.className = "thumb";
+      d.innerHTML = `<canvas width="${N}" height="${N}" aria-label="Image ${i + 1}"></canvas>
+        <span class="tag seen-tag">seen</span><span class="tag pick-tag">decoder</span>
+        <div class="score"><span style="width:0%"></span></div>`;
+      const c = d.querySelector("canvas").getContext("2d"), id = c.createImageData(N, N);
+      img.forEach((v, p) => { const g = 255 * v; id.data.set([g * 0.93, g * 0.9, g, 255], 4 * p); });
+      c.putImageData(id, 0, 0);
+      thumbs.appendChild(d);
+      return d;
+    });
+
+    const pat = document.getElementById("pattern");
+    function drawPattern(measured, predicted) {
+      const dpr = window.devicePixelRatio || 1, W = pat.clientWidth, H = Number(pat.getAttribute("height"));
+      pat.width = Math.round(W * dpr); pat.height = Math.round(H * dpr); pat.style.height = H + "px";
+      const c = pat.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
+      const z = (a) => { const m = a.reduce((s, v) => s + v, 0) / a.length;
+        const sd = Math.sqrt(a.reduce((s, v) => s + (v - m) ** 2, 0) / a.length) || 1; return a.map((v) => (v - m) / sd); };
+      const line = (a, color, width) => {
+        const zz = z(a); c.strokeStyle = color; c.lineWidth = width; c.beginPath();
+        zz.forEach((v, i) => { const x = 4 + i / (zz.length - 1) * (W - 8), y = H / 2 - Math.max(-4, Math.min(4, v)) * H / 9;
+          i ? c.lineTo(x, y) : c.moveTo(x, y); }); c.stroke();
+      };
+      c.fillStyle = "#8e86b3"; c.font = "12px Source Sans 3, sans-serif";
+      c.fillText("voxel 1", 4, H - 4); c.fillText("voxel 98", W - 52, H - 4);
+      if (predicted) line(predicted, "#ff9aa8", 2.5);
+      line(measured, "rgba(255,255,255,0.9)", 1.3);
+    }
+
+    const result = document.getElementById("result");
+    document.getElementById("trial").addEventListener("click", () => {
+      const k = Math.floor(rand() * NIMG), measured = measure(k), d = decode(measured);
+      const rmin = Math.min(...d.r), rmax = Math.max(...d.r);
+      thumbEls.forEach((el, i) => {
+        el.classList.toggle("seen", i === k); el.classList.toggle("picked", i === d.pick);
+        el.querySelector(".score span").style.width = `${Math.round(100 * (d.r[i] - rmin) / (rmax - rmin || 1))}%`;
+      });
+      drawPattern(measured, (model() === "full" ? full : retino)[d.pick]);
+      result.textContent = d.pick === k
+        ? `Correct! The brain saw image ${k + 1}, and the decoder picked it (correlation r = ${d.r[d.pick].toFixed(2)}).`
+        : `Wrong this time: the brain saw image ${k + 1}, but the decoder picked image ${d.pick + 1}.`;
+    });
+    document.getElementById("many").addEventListener("click", () => {
+      let hits = 0;
+      for (let t = 0; t < 200; t++) { const k = Math.floor(rand() * NIMG); if (decode(measure(k)).pick === k) hits++; }
+      const name = model() === "full" ? "Full receptive-field model" : "Position-only model";
+      result.textContent = `${name}, noise ${Number(noiseIn.value).toFixed(1)}: ${Math.round(hits / 2)}% correct over 200 trials (guessing: 8%).`;
+    });
+    noiseIn.addEventListener("input", () => { document.getElementById("noiseval").textContent = Number(noiseIn.value).toFixed(1); });
+    drawPattern(full[0].map(() => 0), null);
+    window.__rf = { full, retino, decode, measure };
+  })();
+  </script>
+</body>
+</html>

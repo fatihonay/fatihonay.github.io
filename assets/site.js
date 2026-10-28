@@ -20,6 +20,13 @@ const SITE = {
 // The post file goes in the notes/ folder (copy notes/_template.html to start).
 const NOTES = [
   {
+    href: "notes/2026-10-28-receptive-fields.html",
+    date: "28 Oct 2026",
+    title: "Receptive fields: how to read an image from the brain",
+    summary: "Steer a model neuron's receptive field, then play the 'pick a card' game: guess which image a model brain saw from its activity alone.",
+    tags: ["Simulation", "Vision"],
+  },
+  {
     href: "notes/2026-10-27-linear-nonlinear.html",
     date: "27 Oct 2026",
     title: "Linear or nonlinear? Solving equations in the brain",

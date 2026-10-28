@@ -480,3 +480,17 @@ footer {
 .lobe-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin-right: 5px; }
 .credits { font-size: 0.9rem; color: var(--muted); }
 .credits li { margin-bottom: 6px; }
+
+/* Receptive-field note: image thumbnails for the identification game */
+.thumbs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 10px; }
+@media (max-width: 560px) { .thumbs { grid-template-columns: repeat(4, 1fr); } }
+.thumb { position: relative; border-radius: 6px; overflow: hidden; border: 2px solid transparent; }
+.thumb canvas { width: 100%; display: block; image-rendering: auto; }
+.thumb .score { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: rgba(0,0,0,0.4); }
+.thumb .score span { display: block; height: 100%; background: linear-gradient(90deg, #7c5cff, #ff7a8a); }
+.thumb.seen { border-color: #5ee6c8; }
+.thumb.picked { border-color: #ffd678; box-shadow: 0 0 12px rgba(255, 214, 120, 0.6); }
+.thumb .tag { position: absolute; top: 3px; left: 4px; font-size: 0.7rem; font-weight: 600; color: #120f22;
+  background: #ffd678; border-radius: 4px; padding: 0 4px; display: none; }
+.thumb.seen .tag.seen-tag { display: block; background: #5ee6c8; }
+.thumb.picked .tag.pick-tag { display: block; top: auto; bottom: 8px; }
