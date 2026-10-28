@@ -21,28 +21,28 @@ const SITE = {
 const NOTES = [
   {
     href: "notes/2026-10-28-receptive-fields.html",
-    date: "28 Oct 2026",
+    date: "22 Oct 2026",
     title: "Receptive fields: how to read an image from the brain",
     summary: "Steer a model neuron's receptive field, then play the 'pick a card' game: guess which image a model brain saw from its activity alone.",
     tags: ["Simulation", "Vision"],
   },
   {
     href: "notes/2026-10-27-linear-nonlinear.html",
-    date: "27 Oct 2026",
+    date: "15 Oct 2026",
     title: "Linear or nonlinear? Solving equations in the brain",
     summary: "Why EEG signals add up but neurons don't, and how a computer finds answers algebra can't — with a self-exciting neuron population you can steer.",
     tags: ["Simulation", "Modelling"],
   },
   {
     href: "notes/2026-10-26-visual-hierarchy.html",
-    date: "26 Oct 2026",
+    date: "8 Oct 2026",
     title: "From edges to objects: how the brain sees",
     summary: "Draw a shape and watch it climb a tiny brain-like hierarchy: edges, pooled edges, corners — the idea behind CNNs.",
     tags: ["Simulation", "Vision"],
   },
   {
     href: "notes/2026-10-15-synchrony.html",
-    date: "15 Oct 2026",
+    date: "1 Oct 2026",
     title: "How do neurons fall into rhythm?",
     summary: "Play with 80 coupled oscillators and watch a brain-like rhythm appear out of noise.",
     tags: ["Simulation", "Oscillations"],
