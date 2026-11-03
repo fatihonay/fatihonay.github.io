@@ -559,3 +559,9 @@ footer {
 .note-nav a span { display: block; font-size: 0.82rem; font-weight: 500; color: var(--accent); margin-bottom: 4px; }
 .note-nav .next { text-align: right; }
 @media (max-width: 560px) { .note-nav { grid-template-columns: 1fr; } .note-nav .next { text-align: left; } }
+
+/* Label on demos that use simulated rather than measured data */
+.sim-badge { display: inline-block; margin: 0 0 12px; padding: 3px 12px; border-radius: 999px;
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.02em; color: #120f22;
+  background: linear-gradient(90deg, #ffd678, #ffb3c1); }
+.sim-badge::before { content: "⚙ "; }

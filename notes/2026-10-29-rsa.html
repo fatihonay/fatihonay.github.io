@@ -7,7 +7,7 @@
   <meta name="description" content="How representational similarity analysis (RSA) compares brain regions, models, people and recording methods by asking one question: which stimuli are treated as similar?">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/style.css?v=20261104">
+  <link rel="stylesheet" href="../assets/style.css?v=20261105">
   <!-- head-tags -->
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="../assets/img/icon-32.png" sizes="32x32" type="image/png">
@@ -30,7 +30,7 @@
 </head>
 <body>
   <div id="site-header"></div>
-  <script src="../assets/site.js?v=20261104" data-root="../"></script>
+  <script src="../assets/site.js?v=20261105" data-root="../"></script>
 
   <main class="container">
     <article class="post">
@@ -67,6 +67,7 @@
       </p>
 
       <div class="sim" id="sim1">
+        <p class="sim-badge">Simulated data, built to illustrate the method</p>
         <div class="controls" style="margin-top:0">
           <span class="legend"><strong style="color:#e9e5ff">Brain region</strong></span>
           <label><input type="radio" name="region" value="evc" checked> Early visual cortex</label>
@@ -122,6 +123,7 @@
       </p>
 
       <div class="sim" id="sim2">
+        <p class="sim-badge">Simulated data, built to illustrate the method</p>
         <p class="panel-title" style="color:#e9e5ff">Four model RDMs, compared with the region chosen above</p>
         <div class="model-grid" id="models"></div>
         <canvas id="nullHist" height="150" style="margin-top:14px" aria-label="Correlations after shuffling the stimulus labels"></canvas>
