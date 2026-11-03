@@ -494,3 +494,68 @@ footer {
   background: #ffd678; border-radius: 4px; padding: 0 4px; display: none; }
 .thumb.seen .tag.seen-tag { display: block; background: #5ee6c8; }
 .thumb.picked .tag.pick-tag { display: block; top: auto; bottom: 8px; }
+
+/* RSA note: stimulus buttons and model thumbnails */
+.stim-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.stim-row button { font-size: 1.4rem; line-height: 1; width: 2.3em; height: 2.3em; border-radius: 10px;
+  border: 2px solid #3a3160; background: #1b1631; cursor: pointer; padding: 0; }
+.stim-row button.a { border-color: #5ee6c8; box-shadow: 0 0 10px rgba(94, 230, 200, 0.5); }
+.stim-row button.b { border-color: #ffd678; box-shadow: 0 0 10px rgba(255, 214, 120, 0.5); }
+.model-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 560px) { .model-grid { grid-template-columns: repeat(2, 1fr); } }
+.model-grid figure { margin: 0; }
+.model-grid canvas { width: 100%; aspect-ratio: 1; image-rendering: pixelated; border-radius: 6px; display: block; }
+.model-grid figcaption { font-size: 0.8rem; color: #cfc8ef; margin-top: 4px; }
+.model-grid .fit { font-variant-numeric: tabular-nums; color: #ffd678; font-weight: 600; }
+.model-grid figure.best canvas { box-shadow: 0 0 0 2px #ffd678, 0 0 14px rgba(255, 214, 120, 0.5); }
+
+/* ---------- Living hero (Home) ---------- */
+.banner.hero { padding: 76px 0 64px; }
+.banner.hero canvas.neurons { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.banner.hero .name { font-size: clamp(2.2rem, 6vw, 3.4rem); }
+.banner .tagline { margin: 14px 0 0; max-width: 34em; font-size: 1.12rem; opacity: 0.92; }
+.banner.hero .container { pointer-events: none; }
+.banner.hero .container a { pointer-events: auto; }
+
+/* ---------- Featured (Home) ---------- */
+.featured { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 16px; }
+@media (max-width: 720px) { .featured { grid-template-columns: 1fr; } }
+.feature, .note-card {
+  display: block; color: var(--text); background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.feature:hover, .note-card:hover { text-decoration: none; transform: translateY(-4px);
+  box-shadow: 0 14px 34px rgba(60, 40, 120, 0.16); }
+.feature img, .note-card img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; display: block;
+  transition: transform 0.4s ease; }
+.feature:hover img, .note-card:hover img { transform: scale(1.03); }
+.feature-body, .note-card-body { padding: 14px 18px 18px; }
+.feature .kicker { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--coral); font-weight: 600; }
+.feature h3, .note-card h3 { margin: 4px 0 6px; font-size: 1.25rem; }
+.feature p, .note-card p { margin: 0; color: var(--muted); }
+.feature .go { display: inline-block; margin-top: 10px; color: var(--accent); font-weight: 600; }
+
+/* ---------- Lab Notes picture cards ---------- */
+.note-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 18px; }
+.note-card .date { font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.note-card h3 { font-size: 1.12rem; }
+.note-card p { font-size: 0.95rem; }
+
+/* ---------- Scroll-in motion ---------- */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+/* ---------- Lab Note reading features ---------- */
+.read-progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 50; transform-origin: 0 50%;
+  transform: scaleX(0); background: linear-gradient(90deg, var(--accent), var(--coral), #ffd678); }
+.note-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 40px; padding-top: 20px;
+  border-top: 1px solid var(--border); }
+.note-nav a { display: block; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); font-weight: 600; line-height: 1.35;
+  transition: border-color 0.2s ease, transform 0.2s ease; }
+.note-nav a:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-2px); }
+.note-nav a span { display: block; font-size: 0.82rem; font-weight: 500; color: var(--accent); margin-bottom: 4px; }
+.note-nav .next { text-align: right; }
+@media (max-width: 560px) { .note-nav { grid-template-columns: 1fr; } .note-nav .next { text-align: left; } }

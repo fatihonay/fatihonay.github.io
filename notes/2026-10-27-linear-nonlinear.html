@@ -7,7 +7,7 @@
   <meta name="description" content="Why EEG signals add up linearly but neurons don't, and how a computer finds solutions that algebra can't: an interactive introduction to linear and nonlinear systems.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/style.css?v=20261029">
+  <link rel="stylesheet" href="../assets/style.css?v=20261104">
   <!-- head-tags -->
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="../assets/img/icon-32.png" sizes="32x32" type="image/png">
@@ -30,7 +30,7 @@
 </head>
 <body>
   <div id="site-header"></div>
-  <script src="../assets/site.js?v=20261029" data-root="../"></script>
+  <script src="../assets/site.js?v=20261104" data-root="../"></script>
 
   <main class="container">
     <article class="post">
@@ -267,7 +267,8 @@ print(np.round(roots, 3))                 # [0.099 0.207 0.993]</code></pre>
     function fit() {
       const dpr = window.devicePixelRatio || 1;
       W = canvas.clientWidth;
-      H = Number(canvas.getAttribute("height"));
+      canvas.dataset.h ||= canvas.getAttribute("height");   // intended height, before scaling
+      H = Number(canvas.dataset.h);
       canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
       canvas.style.height = H + "px";
       ctx = canvas.getContext("2d");

@@ -115,11 +115,37 @@ def draw_atlas(ax):
     ax.set_xlim(15, 178); ax.set_ylim(215, 15)
 
 
+def draw_rdm(ax):
+    rng = np.random.default_rng(4)
+    cat = np.repeat([0, 1, 2, 3], 4)
+    proto = rng.standard_normal(40)
+    X = np.outer((cat == 0) + 0.45 * (cat == 1), proto) * 2 + 0.7 * rng.standard_normal((16, 40))
+    ax.imshow(1 - np.corrcoef(X), cmap=GLOW, interpolation="nearest")
+
+
 def draw_portrait(ax):
     img = plt.imread(SITE / "assets/img/profile.jpg")
     h, w = img.shape[:2]
     s = min(h, w)
     ax.imshow(img[(h - s) // 2:(h - s) // 2 + s, (w - s) // 2:(w - s) // 2 + s])
+
+
+def thumb(filename, draw):
+    """Picture-only thumbnail (800x450) for the visual cards on the Home and Lab Notes pages."""
+    out = SITE / "assets/img/thumbs"
+    out.mkdir(parents=True, exist_ok=True)
+    fig = plt.figure(figsize=(8, 4.5), dpi=100)
+    bg = fig.add_axes([0, 0, 1, 1])
+    grad = np.add.outer(np.linspace(0, 0.3, 45), np.linspace(0, 0.7, 80))
+    bg.imshow(grad, cmap=BANNER, aspect="auto", vmin=0, vmax=1); bg.axis("off")
+    ax = fig.add_axes([0.5 - 0.34 * 4.5 / 8, 0.08, 0.68 * 4.5 / 8, 0.84])
+    ax.set_facecolor("#120f22")
+    draw(ax)
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    ax.set_xticks([]); ax.set_yticks([])
+    fig.savefig(out / filename, dpi=100)
+    plt.close(fig)
 
 
 def icons():
@@ -157,6 +183,11 @@ if __name__ == "__main__":
     card("note-visual-hierarchy.png", "From edges to objects: how the brain sees", "Lab Note", draw_hierarchy)
     card("note-linear-nonlinear.png", "Linear or nonlinear? Solving equations in the brain", "Lab Note", draw_linear)
     card("note-receptive-fields.png", "Receptive fields: reading an image from the brain", "Lab Note", draw_rf)
+    card("note-rsa.png", "Representational similarity analysis", "Lab Note", draw_rdm)
+    for name, draw in [("synchrony", draw_synchrony), ("visual-hierarchy", draw_hierarchy),
+                       ("linear-nonlinear", draw_linear), ("receptive-fields", draw_rf),
+                       ("rsa", draw_rdm), ("atlas", draw_atlas)]:
+        thumb(f"{name}.jpg", draw)
     icons()
     for f in sorted(OUT.iterdir()):
         print(f"{f.name:30s} {f.stat().st_size / 1e3:.0f} kB")

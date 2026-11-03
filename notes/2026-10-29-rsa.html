@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Representational similarity analysis: comparing brains and models · Fatih Onay</title>
+  <meta name="description" content="How representational similarity analysis (RSA) compares brain regions, models, people and recording methods by asking one question: which stimuli are treated as similar?">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css?v=20261104">
+  <!-- head-tags -->
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/img/icon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/img/icon-180.png">
+  <link rel="canonical" href="https://fatihonay.github.io/notes/2026-10-29-rsa.html">
+  <meta property="og:site_name" content="Fatih Onay, Ph.D.">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Representational similarity analysis: comparing brains and models · Fatih Onay">
+  <meta property="og:description" content="How representational similarity analysis (RSA) compares brain regions, models, people and recording methods by asking one question: which stimuli are treated as similar?">
+  <meta property="og:url" content="https://fatihonay.github.io/notes/2026-10-29-rsa.html">
+  <meta property="og:image" content="https://fatihonay.github.io/assets/img/social/note-rsa.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Representational similarity analysis: comparing brains and models · Fatih Onay">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Representational similarity analysis: comparing brains and models · Fatih Onay">
+  <meta name="twitter:description" content="How representational similarity analysis (RSA) compares brain regions, models, people and recording methods by asking one question: which stimuli are treated as similar?">
+  <meta name="twitter:image" content="https://fatihonay.github.io/assets/img/social/note-rsa.png">
+  <!-- /head-tags -->
+</head>
+<body>
+  <div id="site-header"></div>
+  <script src="../assets/site.js?v=20261104" data-root="../"></script>
+
+  <main class="container">
+    <article class="post">
+      <p><a href="../notes.html">← All Lab Notes</a></p>
+      <h1>Representational similarity analysis: comparing brains and models</h1>
+      <p class="post-meta">29 October 2026 · Simulation · Methods</p>
+
+      <p>
+        Suppose you have a computer model of vision with 1,000 artificial neurons, and
+        fMRI data from a brain region with 500 voxels. Which voxel corresponds to which
+        model unit? There is no answer. The same problem appears when you compare two
+        people (their brains are shaped differently), a human and a monkey, or fMRI and
+        EEG (completely different kinds of signals).
+      </p>
+      <p>
+        <strong>Representational similarity analysis</strong> (RSA) sidesteps the problem
+        with a simple change of question
+        (<a href="https://doi.org/10.3389/neuro.06.004.2008">Kriegeskorte, Mur and Bandettini, 2008</a>).
+        Instead of asking "what does each channel do?", it asks: <em>which stimuli does
+        this system treat as similar, and which as different?</em> Any brain region, model
+        or measurement can answer that question, and the answers can be compared directly.
+      </p>
+
+      <h2>The representational dissimilarity matrix</h2>
+      <p>
+        Show a set of stimuli and record the activity pattern each one evokes. For every
+        <em>pair</em> of stimuli, measure how different their two patterns are. The
+        paper's choice is <strong>1 − correlation</strong>: 0 for identical patterns, 1
+        for unrelated ones. Put all these numbers in a table with one row and one column
+        per stimulus, and you get the <strong>representational dissimilarity matrix</strong>
+        (RDM). It is symmetric, with zeros on the diagonal (a stimulus is identical to
+        itself), and it no longer depends on which voxel is which: it is a signature of
+        <em>what information</em> the region carries.
+      </p>
+
+      <div class="sim" id="sim1">
+        <div class="controls" style="margin-top:0">
+          <span class="legend"><strong style="color:#e9e5ff">Brain region</strong></span>
+          <label><input type="radio" name="region" value="evc" checked> Early visual cortex</label>
+          <label><input type="radio" name="region" value="ffa"> Face area</label>
+        </div>
+        <p class="sim-caption">Click two stimuli to compare their activity patterns:</p>
+        <div class="stim-row" id="stimRow"></div>
+        <canvas id="patterns" height="92" aria-label="Activity patterns of the two selected stimuli"></canvas>
+        <p class="sim-caption" id="pairText" aria-live="polite"></p>
+        <div class="sim-grid" style="margin-top:10px">
+          <div>
+            <canvas id="rdm" width="360" height="360" aria-label="Representational dissimilarity matrix"></canvas>
+            <p class="sim-caption">The RDM: each square compares two stimuli. Dark = similar patterns, bright = different. Click a square to select that pair.</p>
+          </div>
+          <div>
+            <canvas id="mds" height="360" aria-label="2D map of the stimuli: similar patterns close together"></canvas>
+            <p class="sim-caption">The same information as a map (multidimensional scaling): stimuli that evoke similar patterns are placed close together.</p>
+          </div>
+        </div>
+        <div class="controls">
+          <label>Measurement noise
+            <input type="range" id="noise" min="0.3" max="4" step="0.1" value="1.5">
+            <span class="readout" id="noiseval">1.5</span>
+          </label>
+          <button id="remeasure">Measure again</button>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Try this:</strong> in the <em>face area</em>, click two faces: their
+        dissimilarity is small. Now compare a face and a house: it is large. Switch to
+        <em>early visual cortex</em> and repeat: here the category hardly matters, and
+        the map shows no face cluster. Each region has its own "signature". Raise the
+        noise to see how measurement noise blurs it.
+      </div>
+
+      <h2>Comparing a brain region with models</h2>
+      <p>
+        Here is the payoff. A model does not need to have the same units as the brain;
+        it only needs to make a prediction about which stimuli should be similar. That
+        prediction is also an RDM. It can come from a computational model (for example,
+        Gabor filters like the <a href="2026-10-28-receptive-fields.html">receptive-field note</a>),
+        from a simple category idea ("faces are similar to each other"), or from
+        behaviour (which stimuli people confuse).
+      </p>
+      <p>
+        To compare two RDMs, RSA correlates their entries above the diagonal. It uses a
+        <strong>rank</strong> (Spearman) correlation, because we only expect the model to
+        get the <em>order</em> of the dissimilarities right, not their exact values. To
+        test whether the match is better than chance, it shuffles the stimulus labels of
+        one RDM many times and recomputes the correlation each time. If the real match
+        beats almost all shuffled ones, it is unlikely to be a coincidence.
+      </p>
+
+      <div class="sim" id="sim2">
+        <p class="panel-title" style="color:#e9e5ff">Four model RDMs, compared with the region chosen above</p>
+        <div class="model-grid" id="models"></div>
+        <canvas id="nullHist" height="150" style="margin-top:14px" aria-label="Correlations after shuffling the stimulus labels"></canvas>
+        <p class="sim-caption" id="nullText" aria-live="polite"></p>
+      </div>
+
+      <div class="callout">
+        <strong>Try this:</strong> with <em>early visual cortex</em> selected, the
+        low-level image-feature model wins. Switch to the <em>face area</em>: now the
+        face–animal model wins, the same pattern the paper found in real fMRI data.
+        The histogram shows the correlations you get after shuffling the labels 1,000 times;
+        the real match (the line) sits far outside them.
+      </div>
+
+      <h2>What the paper found</h2>
+      <p>
+        Kriegeskorte and colleagues showed people 96 photos of faces, bodies, animals,
+        objects and places, and computed RDMs for early visual cortex and for the
+        fusiform face area (FFA). In early visual cortex, the best-matching model was
+        simply the <em>silhouette</em> of each image, consistent with a map of the shape
+        that falls on the retina. In the FFA, faces clustered together, and apart from
+        the FFA in the other hemisphere, the best model was a "face–animal prototype"
+        model: all faces evoke a similar pattern, and animals do so to a lesser degree.
+      </p>
+      <p>
+        The bigger idea is that the RDM works as a <strong>common currency</strong>. The
+        same matrix can be computed for computational models, behavioural judgements,
+        brain regions, different people, monkeys and humans
+        (<a href="https://doi.org/10.1016/j.neuron.2008.10.043">Kriegeskorte et al., 2008, <em>Neuron</em></a>),
+        and different recording methods, and all of them can be compared on equal terms.
+      </p>
+
+      <h2>Try it in Python</h2>
+<pre><code>import numpy as np
+from scipy.stats import spearmanr
+
+def rdm(patterns):
+    """patterns: stimuli x channels. Returns 1 - correlation between every pair."""
+    return 1 - np.corrcoef(patterns)
+
+def compare(rdm_a, rdm_b, n_perm=1000, seed=0):
+    """Spearman correlation of two RDMs, and a p-value from shuffling stimulus labels."""
+    upper = np.triu_indices_from(rdm_a, k=1)            # entries above the diagonal
+    r = spearmanr(rdm_a[upper], rdm_b[upper])[0]
+    rng = np.random.default_rng(seed)
+    null = []
+    for _ in range(n_perm):
+        p = rng.permutation(len(rdm_a))                  # shuffle the stimulus labels
+        null.append(spearmanr(rdm_a[p][:, p][upper], rdm_b[upper])[0])
+    return r, np.mean(np.array(null) >= r)
+
+# Toy example: a "face region" whose patterns depend on whether a stimulus is a face
+rng = np.random.default_rng(1)
+is_face = np.repeat([1, 0], 8)                           # 8 faces, 8 non-faces
+face_pattern = rng.standard_normal(50)
+brain = np.outer(is_face, face_pattern) + 0.8 * rng.standard_normal((16, 50))
+face_model = (is_face[:, None] != is_face[None, :]).astype(float)   # 0 = same category
+
+r, p = compare(rdm(brain), face_model)
+print(f"Spearman r = {r:.2f}, p = {p:.3f}")</code></pre>
+
+      <h2>Why this matters for EEG</h2>
+      <p>
+        RSA is one of the most useful tools for EEG and MEG, because it doesn't care
+        that electrodes and fMRI voxels measure completely different things. With EEG you
+        can compute an RDM from the pattern across electrodes at <em>every time point</em>,
+        and watch when, after the image appears, the brain starts to separate faces from
+        objects. Matching these time-resolved RDMs with fMRI RDMs from different brain
+        regions shows <em>where</em> and <em>when</em> each representation appears, an
+        approach called MEG–fMRI fusion
+        (<a href="https://doi.org/10.1038/nn.3635">Cichy et al., 2014</a>). The same matrices
+        can be compared with the layers of a CNN, as in the
+        <a href="2026-10-26-visual-hierarchy.html">visual hierarchy note</a>.
+      </p>
+      <p class="post-meta" style="margin-top:24px">
+        Note: the demos use 16 stimuli and two simulated regions with 60 voxels each,
+        built so that one region carries low-level image information and the other
+        category information. Real data are noisier and need repeated measurements or
+        cross-validated distances.
+      </p>
+    </article>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+  (() => {
+    // ---------- Simulated stimuli, regions and models ----------
+    function mulberry32(a) {
+      return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    }
+    const rand = mulberry32(2008);
+    const randn = () => Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());
+    const randVec = (n) => Array.from({ length: n }, randn);
+    const randMat = (r, c) => Array.from({ length: r }, () => randVec(c));
+
+    const STIM = [
+      ["👩", "woman", 0], ["🧔", "man", 0], ["👶", "baby", 0], ["👴", "old man", 0],
+      ["🐕", "dog", 1], ["🐈", "cat", 1], ["🐎", "horse", 1], ["🐦", "bird", 1],
+      ["🔨", "hammer", 2], ["🔑", "key", 2], ["☂️", "umbrella", 2], ["🎸", "guitar", 2],
+      ["🏠", "house", 3], ["🏰", "castle", 3], ["⛺", "tent", 3], ["🏭", "factory", 3],
+    ];
+    const CAT_NAMES = ["face", "animal", "object", "place"];
+    const CAT_COLORS = ["#ff7a8a", "#ffd678", "#5ee6c8", "#8b6cff"];
+    const S = STIM.length, V = 60, NF = 6;
+    const cat = STIM.map((s) => s[2]);
+    const isFace = cat.map((c) => (c === 0 ? 1 : 0)), isAnimal = cat.map((c) => (c === 1 ? 1 : 0));
+    const isAnimate = cat.map((c) => (c <= 1 ? 1 : 0));
+
+    const feat = randMat(S, NF);                  // low-level image features (size, contrast, shape...)
+    const Aevc = randMat(V, NF), Affa = randMat(V, NF);
+    const faceProto = randVec(V), animProto = randVec(V), indiv = randMat(S, V);
+    const dot = (a, b) => a.reduce((s, v, i) => s + v * b[i], 0);
+
+    // Noise-free responses of the two regions; measurement noise is added on top.
+    const evcClean = feat.map((f) => Aevc.map((row) => dot(row, f)));
+    const ffaClean = feat.map((f, i) => Array.from({ length: V }, (_, v) =>
+      2.2 * (isFace[i] + 0.45 * isAnimal[i]) * faceProto[v] + 0.6 * isAnimate[i] * animProto[v]
+      + 0.5 * indiv[i][v] + 0.25 * dot(Affa[v], f)));
+    let noiseDraw = randMat(S, V);
+    const noiseIn = document.getElementById("noise");
+    const region = () => document.querySelector('input[name="region"]:checked').value;
+    const patterns = () => {
+      const clean = region() === "evc" ? evcClean : ffaClean, k = Number(noiseIn.value);
+      return clean.map((row, i) => row.map((v, j) => v + k * noiseDraw[i][j]));
+    };
+
+    function pearson(a, b) {
+      const n = a.length, ma = a.reduce((s, v) => s + v, 0) / n, mb = b.reduce((s, v) => s + v, 0) / n;
+      let ab = 0, aa = 0, bb = 0;
+      for (let i = 0; i < n; i++) { const x = a[i] - ma, y = b[i] - mb; ab += x * y; aa += x * x; bb += y * y; }
+      return ab / Math.sqrt(aa * bb);
+    }
+    const rdmOf = (P) => P.map((a) => P.map((b) => 1 - pearson(a, b)));
+
+    // Model RDMs
+    const lowModel = rdmOf(feat);
+    const catModel = (v) => v.map((a) => v.map((b) => (a === b ? 0 : 1)));
+    const protoModel = STIM.map((_, i) => STIM.map((__, j) =>
+      i === j ? 0 : isFace[i] && isFace[j] ? 0.2 : isAnimate[i] && isAnimate[j] ? 0.5 : 1));
+    const MODELS = [
+      { name: "Low-level image features", rdm: lowModel },
+      { name: "Animate vs inanimate", rdm: catModel(isAnimate) },
+      { name: "Face vs non-face", rdm: catModel(isFace) },
+      { name: "Face–animal prototype", rdm: protoModel },
+    ];
+
+    // Spearman correlation on the upper triangle (average ranks for ties).
+    const upper = (M, perm) => { const o = []; for (let i = 0; i < S; i++) for (let j = i + 1; j < S; j++)
+      o.push(perm ? M[perm[i]][perm[j]] : M[i][j]); return o; };
+    function ranks(x) {
+      const idx = x.map((v, i) => [v, i]).sort((a, b) => a[0] - b[0]), r = new Array(x.length);
+      for (let i = 0; i < idx.length;) {
+        let j = i; while (j + 1 < idx.length && idx[j + 1][0] === idx[i][0]) j++;
+        for (let k = i; k <= j; k++) r[idx[k][1]] = (i + j) / 2;
+        i = j + 1;
+      }
+      return r;
+    }
+    const spearman = (a, b) => pearson(ranks(a), ranks(b));
+
+    // ---------- Colours ----------
+    const stops = [[18, 15, 34], [90, 50, 190], [255, 122, 138], [255, 220, 130]];
+    const heat = (t) => { t = Math.max(0, Math.min(1, t)) * 3; const i = Math.min(2, Math.floor(t)), f = t - i;
+      return stops[i].map((c, k) => Math.round(c + (stops[i + 1][k] - c) * f)); };
+    const css = (rgb) => `rgb(${rgb.join(",")})`;
+
+    // ---------- Demo 1 ----------
+    let sel = [0, 12];                               // woman vs house to start
+    const row = document.getElementById("stimRow");
+    const buttons = STIM.map(([emoji, name], i) => {
+      const b = document.createElement("button");
+      b.textContent = emoji; b.title = name; b.setAttribute("aria-label", name);
+      b.addEventListener("click", () => { sel = [sel[1], i]; if (sel[0] === sel[1]) sel[0] = (i + 1) % S; draw(); });
+      row.appendChild(b);
+      return b;
+    });
+
+    function fitCanvas(c) {
+      c.dataset.h ||= c.getAttribute("height");      // remember the intended height before scaling
+      const dpr = window.devicePixelRatio || 1, W = c.clientWidth, H = Number(c.dataset.h);
+      c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); c.style.height = H + "px";
+      const ctx = c.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { ctx, W, H };
+    }
+
+    function drawPatterns(P, D) {
+      const { ctx, W, H } = fitCanvas(document.getElementById("patterns"));
+      ctx.clearRect(0, 0, W, H);
+      const lab = 34, w = (W - lab) / V;
+      const all = [...P[sel[0]], ...P[sel[1]]], m = Math.max(...all.map(Math.abs));
+      [sel[0], sel[1]].forEach((s, r) => {
+        ctx.font = "22px sans-serif"; ctx.textBaseline = "middle";
+        ctx.fillText(STIM[s][0], 2, 22 + r * 46);
+        P[s].forEach((v, j) => { ctx.fillStyle = css(heat(0.5 + v / (2 * m))); ctx.fillRect(lab + j * w, 4 + r * 46, w - 1, 36); });
+        ctx.strokeStyle = r === 0 ? "#5ee6c8" : "#ffd678"; ctx.lineWidth = 2; ctx.strokeRect(lab - 1, 3 + r * 46, W - lab, 38);
+      });
+      const r = 1 - D[sel[0]][sel[1]];
+      document.getElementById("pairText").textContent =
+        `${STIM[sel[0]][1]} vs ${STIM[sel[1]][1]}: pattern correlation r = ${r.toFixed(2)} → dissimilarity 1 − r = ${D[sel[0]][sel[1]].toFixed(2)}`;
+    }
+
+    // Normalise dissimilarities to ranks (percentiles) for display, as in the paper.
+    function percentile(D) {
+      const vals = upper(D).slice().sort((a, b) => a - b);
+      return (v) => { let lo = 0, hi = vals.length; while (lo < hi) { const m = (lo + hi) >> 1; vals[m] < v ? (lo = m + 1) : (hi = m); } return lo / vals.length; };
+    }
+    function drawRDM(canvas, D, opts = {}) {
+      const ctx = canvas.getContext("2d"), N = canvas.width, lab = opts.labels ? 30 : 0, cell = (N - lab) / S;
+      ctx.clearRect(0, 0, N, N);
+      const pct = percentile(D);
+      for (let i = 0; i < S; i++) for (let j = 0; j < S; j++) {
+        ctx.fillStyle = i === j ? css(stops[0]) : css(heat(pct(D[i][j])));
+        ctx.fillRect(lab + j * cell, lab + i * cell, Math.ceil(cell), Math.ceil(cell));
+      }
+      if (opts.labels) {
+        ctx.font = `${Math.round(cell * 0.8)}px sans-serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        STIM.forEach(([e], i) => { ctx.fillText(e, lab / 2, lab + (i + 0.5) * cell); ctx.fillText(e, lab + (i + 0.5) * cell, lab / 2); });
+        [[sel[0], sel[1]], [sel[1], sel[0]]].forEach(([i, j]) => {
+          ctx.strokeStyle = "#fff"; ctx.lineWidth = 3; ctx.strokeRect(lab + j * cell + 1.5, lab + i * cell + 1.5, cell - 3, cell - 3);
+        });
+      }
+    }
+    const rdmCanvas = document.getElementById("rdm");
+    rdmCanvas.style.cursor = "pointer";
+    rdmCanvas.addEventListener("click", (e) => {
+      const r = rdmCanvas.getBoundingClientRect(), N = rdmCanvas.width, lab = 30, cell = (N - lab) / S;
+      const x = ((e.clientX - r.left) / r.width) * N - lab, y = ((e.clientY - r.top) / r.height) * N - lab;
+      const i = Math.floor(y / cell), j = Math.floor(x / cell);
+      if (i >= 0 && j >= 0 && i < S && j < S && i !== j) { sel = [i, j]; draw(); }
+    });
+
+    // Classical multidimensional scaling: top-2 eigenvectors of the double-centred squared distances.
+    function mds(D) {
+      const n = D.length, D2 = D.map((r) => r.map((v) => v * v));
+      const rm = D2.map((r) => r.reduce((s, v) => s + v, 0) / n), gm = rm.reduce((s, v) => s + v, 0) / n;
+      const B = D2.map((r, i) => r.map((v, j) => -0.5 * (v - rm[i] - rm[j] + gm)));
+      const coords = [], Bk = B.map((r) => r.slice());
+      for (let k = 0; k < 2; k++) {
+        let v = Array.from({ length: n }, (_, i) => Math.sin(i * 1.7 + k + 1)), lam = 0;
+        for (let it = 0; it < 300; it++) {
+          const w = Bk.map((r) => dot(r, v)); lam = Math.hypot(...w); v = w.map((x) => x / lam);
+        }
+        coords.push(v.map((x) => x * Math.sqrt(Math.max(lam, 0))));
+        for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) Bk[i][j] -= lam * v[i] * v[j];
+      }
+      return STIM.map((_, i) => [coords[0][i], coords[1][i]]);
+    }
+    function drawMDS(D) {
+      const { ctx, W, H } = fitCanvas(document.getElementById("mds"));
+      ctx.clearRect(0, 0, W, H);
+      const xy = mds(D), xs = xy.map((p) => p[0]), ys = xy.map((p) => p[1]);
+      const span = Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)) || 1;
+      const cx = (Math.max(...xs) + Math.min(...xs)) / 2, cy = (Math.max(...ys) + Math.min(...ys)) / 2;
+      const sc = (Math.min(W, H) - 60) / span;
+      xy.forEach(([x, y], i) => {
+        const px = W / 2 + (x - cx) * sc, py = H / 2 + (y - cy) * sc;
+        ctx.beginPath(); ctx.arc(px, py, 17, 0, 2 * Math.PI);
+        ctx.fillStyle = "#1b1631"; ctx.fill(); ctx.lineWidth = 2.5; ctx.strokeStyle = CAT_COLORS[cat[i]]; ctx.stroke();
+        ctx.font = "18px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(STIM[i][0], px, py + 1);
+      });
+      ctx.font = "12px Source Sans 3, sans-serif"; ctx.textAlign = "left";
+      CAT_NAMES.forEach((n, k) => { ctx.fillStyle = CAT_COLORS[k]; ctx.fillRect(8 + k * 74, H - 16, 10, 10);
+        ctx.fillStyle = "#cfc8ef"; ctx.fillText(n, 22 + k * 74, H - 10); });
+    }
+
+    // ---------- Demo 2 ----------
+    const modelsEl = document.getElementById("models");
+    const modelFigs = MODELS.map((m) => {
+      const f = document.createElement("figure");
+      f.innerHTML = `<canvas width="160" height="160"></canvas><figcaption>${m.name}<br>ρ = <span class="fit">–</span></figcaption>`;
+      modelsEl.appendChild(f);
+      drawRDM(f.querySelector("canvas"), m.rdm);
+      return f;
+    });
+
+    function drawComparison(D) {
+      const brain = upper(D);
+      const fits = MODELS.map((m) => spearman(brain, upper(m.rdm)));
+      const best = fits.indexOf(Math.max(...fits));
+      modelFigs.forEach((f, i) => { f.querySelector(".fit").textContent = fits[i].toFixed(2); f.classList.toggle("best", i === best); });
+
+      // Permutation test for the best model: shuffle the stimulus labels of the brain RDM.
+      const model = upper(MODELS[best].rdm), nullR = [];
+      for (let t = 0; t < 1000; t++) {
+        const p = Array.from({ length: S }, (_, i) => i);
+        for (let i = S - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); [p[i], p[j]] = [p[j], p[i]]; }
+        nullR.push(spearman(upper(D, p), model));
+      }
+      const pval = (nullR.filter((r) => r >= fits[best]).length + 1) / (nullR.length + 1);
+
+      const { ctx, W, H } = fitCanvas(document.getElementById("nullHist"));
+      ctx.clearRect(0, 0, W, H);
+      const bins = 40, lo = -1, hi = 1, counts = new Array(bins).fill(0);
+      nullR.forEach((r) => counts[Math.min(bins - 1, Math.floor((r - lo) / (hi - lo) * bins))]++);
+      const cmax = Math.max(...counts), X = (v) => 10 + (v - lo) / (hi - lo) * (W - 20), base = H - 24;
+      counts.forEach((c, k) => { ctx.fillStyle = "#6a54b8"; const h = (c / cmax) * (base - 10);
+        ctx.fillRect(X(lo + k * (hi - lo) / bins) + 1, base - h, (W - 20) / bins - 2, h); });
+      ctx.strokeStyle = "#ffd678"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(X(fits[best]), 6); ctx.lineTo(X(fits[best]), base); ctx.stroke();
+      ctx.fillStyle = "#8e86b3"; ctx.font = "12px Source Sans 3, sans-serif"; ctx.textAlign = "center";
+      [-1, -0.5, 0, 0.5, 1].forEach((v) => ctx.fillText(v.toString(), X(v), H - 8));
+      document.getElementById("nullText").textContent =
+        `Best model: ${MODELS[best].name} (ρ = ${fits[best].toFixed(2)}). Purple: ρ after shuffling the stimulus labels 1,000 times. ` +
+        `Gold line: the real match, p ${pval < 0.001 ? "< 0.001" : "= " + pval.toFixed(3)}.`;
+    }
+
+    // ---------- Update ----------
+    function draw() {
+      const P = patterns(), D = rdmOf(P);
+      buttons.forEach((b, i) => { b.classList.toggle("a", i === sel[0]); b.classList.toggle("b", i === sel[1]); });
+      drawPatterns(P, D);
+      drawRDM(rdmCanvas, D, { labels: true });
+      drawMDS(D);
+      drawComparison(D);
+    }
+    document.querySelectorAll('input[name="region"]').forEach((r) => r.addEventListener("change", draw));
+    noiseIn.addEventListener("input", () => { document.getElementById("noiseval").textContent = Number(noiseIn.value).toFixed(1); draw(); });
+    document.getElementById("remeasure").addEventListener("click", () => { noiseDraw = randMat(S, V); draw(); });
+    window.addEventListener("resize", draw);
+    draw();
+    window.__rsa = { draw };
+  })();
+  </script>
+</body>
+</html>

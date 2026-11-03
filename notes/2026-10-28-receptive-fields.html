@@ -7,7 +7,7 @@
   <meta name="description" content="What a receptive field is, how to model it with Gabor filters, and how receptive-field models let scientists tell which image a person saw from brain activity alone.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/style.css?v=20261029">
+  <link rel="stylesheet" href="../assets/style.css?v=20261104">
   <!-- head-tags -->
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="../assets/img/icon-32.png" sizes="32x32" type="image/png">
@@ -30,7 +30,7 @@
 </head>
 <body>
   <div id="site-header"></div>
-  <script src="../assets/site.js?v=20261029" data-root="../"></script>
+  <script src="../assets/site.js?v=20261104" data-root="../"></script>
 
   <main class="container">
     <article class="post">
@@ -298,7 +298,8 @@ def identify(measured, predicted_patterns):
     let tctx, TW, TH;
     function fitTuning() {
       const dpr = window.devicePixelRatio || 1;
-      TW = tuneCanvas.clientWidth; TH = Number(tuneCanvas.getAttribute("height"));
+      tuneCanvas.dataset.h ||= tuneCanvas.getAttribute("height");   // intended height, before scaling
+      TW = tuneCanvas.clientWidth; TH = Number(tuneCanvas.dataset.h);
       tuneCanvas.width = Math.round(TW * dpr); tuneCanvas.height = Math.round(TH * dpr);
       tuneCanvas.style.height = TH + "px";
       tctx = tuneCanvas.getContext("2d"); tctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -437,7 +438,8 @@ def identify(measured, predicted_patterns):
 
     const pat = document.getElementById("pattern");
     function drawPattern(measured, predicted) {
-      const dpr = window.devicePixelRatio || 1, W = pat.clientWidth, H = Number(pat.getAttribute("height"));
+      pat.dataset.h ||= pat.getAttribute("height");
+      const dpr = window.devicePixelRatio || 1, W = pat.clientWidth, H = Number(pat.dataset.h);
       pat.width = Math.round(W * dpr); pat.height = Math.round(H * dpr); pat.style.height = H + "px";
       const c = pat.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W, H);
       const z = (a) => { const m = a.reduce((s, v) => s + v, 0) / a.length;
