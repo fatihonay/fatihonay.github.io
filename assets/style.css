@@ -565,3 +565,12 @@ footer {
   font-size: 0.8rem; font-weight: 600; letter-spacing: 0.02em; color: #120f22;
   background: linear-gradient(90deg, #ffd678, #ffb3c1); }
 .sim-badge::before { content: "⚙ "; }
+
+/* Recurrence note: grid of RDM movies (network row + brain row) */
+.movie-grid { display: grid; grid-template-columns: 70px repeat(3, 1fr); gap: 8px 10px; align-items: center; }
+.movie-grid .rowlab { font-size: 0.78rem; color: #cfc8ef; line-height: 1.25; }
+.movie-grid .collab { font-size: 0.82rem; font-weight: 600; color: #e9e5ff; text-align: center; }
+.movie-grid canvas { width: 100%; aspect-ratio: 1; image-rendering: pixelated; border-radius: 6px; display: block; }
+.movie-grid .match { font-size: 0.8rem; text-align: center; color: #ffd678; font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) { .movie-grid { grid-template-columns: 52px repeat(3, 1fr); gap: 6px; } }
+.sim input[type="range"].wide { width: min(320px, 60vw); }

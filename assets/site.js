@@ -21,6 +21,14 @@ const SITE = {
 // The post file goes in the notes/ folder (copy notes/_template.html to start).
 const NOTES = [
   {
+    href: "notes/2026-11-05-recurrence.html",
+    thumb: "assets/img/thumbs/recurrence.jpg",
+    date: "5 Nov 2026",
+    title: "Why the brain needs recurrence: RDM movies of a static image",
+    summary: "A static image, a changing brain: watch RDM movies from recurrent and feedforward networks and see why only recurrence can follow the human visual system.",
+    tags: ["Simulation", "Methods"],
+  },
+  {
     href: "notes/2026-10-29-rsa.html",
     thumb: "assets/img/thumbs/rsa.jpg",
     date: "29 Oct 2026",

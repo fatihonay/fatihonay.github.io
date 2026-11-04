@@ -35,6 +35,7 @@ PAGES = {
     "notes/2026-10-27-linear-nonlinear.html": ("note-linear-nonlinear.png", "article", None),
     "notes/2026-10-28-receptive-fields.html": ("note-receptive-fields.png", "article", None),
     "notes/2026-10-29-rsa.html": ("note-rsa.png", "article", None),
+    "notes/2026-11-05-recurrence.html": ("note-recurrence.png", "article", None),
 }
 
 BLOCK = re.compile(r"\n?  <!-- head-tags -->.*?<!-- /head-tags -->", re.S)

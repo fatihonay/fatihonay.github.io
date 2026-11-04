@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Why the brain needs recurrence: RDM movies of a static image · Fatih Onay</title>
+  <meta name="description" content="A static image produces a representational geometry that keeps changing for 300 ms. Watch RDM movies from a recurrent and a feedforward network and see why recurrence is needed to match the human visual system.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css?v=20261106">
+  <!-- head-tags -->
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../assets/img/icon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/img/icon-180.png">
+  <link rel="canonical" href="https://fatihonay.github.io/notes/2026-11-05-recurrence.html">
+  <meta property="og:site_name" content="Fatih Onay, Ph.D.">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Why the brain needs recurrence: RDM movies of a static image · Fatih Onay">
+  <meta property="og:description" content="A static image produces a representational geometry that keeps changing for 300 ms. Watch RDM movies from a recurrent and a feedforward network and see why recurrence is needed to match the human visual system.">
+  <meta property="og:url" content="https://fatihonay.github.io/notes/2026-11-05-recurrence.html">
+  <meta property="og:image" content="https://fatihonay.github.io/assets/img/social/note-recurrence.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Why the brain needs recurrence: RDM movies of a static image · Fatih Onay">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Why the brain needs recurrence: RDM movies of a static image · Fatih Onay">
+  <meta name="twitter:description" content="A static image produces a representational geometry that keeps changing for 300 ms. Watch RDM movies from a recurrent and a feedforward network and see why recurrence is needed to match the human visual system.">
+  <meta name="twitter:image" content="https://fatihonay.github.io/assets/img/social/note-recurrence.png">
+  <!-- /head-tags -->
+</head>
+<body>
+  <div id="site-header"></div>
+  <script src="../assets/site.js?v=20261106" data-root="../"></script>
+
+  <main class="container">
+    <article class="post">
+      <p><a href="../notes.html">← All Lab Notes</a></p>
+      <h1>Why the brain needs recurrence: RDM movies of a static image</h1>
+      <p class="post-meta">5 November 2026 · Simulation · Methods</p>
+
+      <p>
+        Look at a photo of a face. The photo does not change, but for about 300 ms
+        after it appears, the way your visual cortex represents it changes again and
+        again. First it reflects edges and textures, then "this is a face", then "this
+        is something alive". How can a fixed input produce a representation that keeps
+        moving? And what does that tell us about how the brain is wired?
+      </p>
+      <p>
+        <a href="https://doi.org/10.1073/pnas.1905544116">Kietzmann and colleagues (2019, <em>PNAS</em>)</a>
+        answered this by combining MEG, the
+        <a href="2026-10-29-rsa.html">representational similarity analysis</a> from the
+        previous note, and deep neural networks. Their conclusion is in the title:
+        <strong>recurrence is required</strong>.
+      </p>
+
+      <h2>RDM movies: RSA at every millisecond</h2>
+      <p>
+        Fifteen people viewed 92 images (human and animal faces and bodies, natural and
+        man-made objects) while MEG recorded their brain activity. The signals were mapped
+        onto three regions along the ventral visual stream: early visual cortex (V1–3), an
+        intermediate stage (V4t/LO) and a high-level stage (IT/PHC). For each region and
+        each time point, the authors computed an RDM. A sequence of RDMs over time is an
+        <strong>RDM movie</strong>.
+      </p>
+      <p>
+        The movies were far from static. Low-level image structure peaked in V1–3 at about
+        100 ms. A face cluster appeared in all regions at about 130 ms. The
+        animate–inanimate division appeared first in IT/PHC (about 140 ms), faded, and only
+        later emerged in V4t/LO (about 260 ms): a <em>reverse</em> cascade, from high-level
+        to intermediate. Analyses of information flow between regions found influence in
+        both directions, feedforward and feedback.
+      </p>
+
+      <h2>How can a static input produce changing geometry?</h2>
+      <p>
+        In a <strong>feedforward</strong> network, each layer passes its result to the next
+        one, once. Even if its units "ramp up" gradually, a layer's pattern only gets
+        stronger; its <em>shape</em>, and so its RDM, stays the same. In a
+        <strong>recurrent</strong> network, units also receive input from their neighbours
+        in the same layer (lateral connections) and from higher layers (top-down
+        connections). The activity keeps being reshaped, even though the image is fixed,
+        so the representational geometry can evolve.
+      </p>
+
+      <div class="sim" id="sim">
+        <p class="sim-badge">Simulated data and hand-set networks, built to illustrate the method</p>
+        <div class="controls" style="margin-top:0">
+          <span class="legend"><strong style="color:#e9e5ff">Network</strong></span>
+          <label><input type="radio" name="model" value="rec" checked> Recurrent (lateral + top-down)</label>
+          <label><input type="radio" name="model" value="ff"> Feedforward (ramping)</label>
+        </div>
+        <div class="stim-row" id="stimRow" aria-label="The 12 stimuli"></div>
+
+        <div class="movie-grid" id="movie">
+          <span></span>
+          <span class="collab">Early</span><span class="collab">Intermediate</span><span class="collab">High-level</span>
+          <span class="rowlab">Network layer</span>
+          <canvas id="n0" width="12" height="12"></canvas><canvas id="n1" width="12" height="12"></canvas><canvas id="n2" width="12" height="12"></canvas>
+          <span class="rowlab">Brain region (simulated)</span>
+          <canvas id="b0" width="12" height="12"></canvas><canvas id="b1" width="12" height="12"></canvas><canvas id="b2" width="12" height="12"></canvas>
+          <span></span>
+          <span class="match" id="m0"></span><span class="match" id="m1"></span><span class="match" id="m2"></span>
+        </div>
+        <p class="sim-caption">Top row: the network's RDM in each layer. Bottom row: simulated RDMs for V1–3, V4t/LO and IT/PHC at the same moment. Dark = similar, bright = different. Numbers: how well each layer matches its region right now (Spearman ρ).</p>
+
+        <div class="controls">
+          <button id="play">▶ Play</button>
+          <label>Time after image onset
+            <input type="range" class="wide" id="time" min="0" max="29" step="1" value="0">
+            <span class="readout" id="timeval">0 ms</span>
+          </label>
+        </div>
+
+        <div class="sim-grid" style="margin-top:12px">
+          <div>
+            <canvas id="traj" height="300" aria-label="Layer 3 representations moving over time"></canvas>
+            <p class="sim-caption">The 12 stimuli in the high-level layer over time (first two principal components). Trails show where each one has been.</p>
+          </div>
+          <div>
+            <canvas id="matchplot" height="300" aria-label="Model to brain match over time"></canvas>
+            <p class="sim-caption">Frame-by-frame match between network and brain RDMs, for each region. Solid: the network chosen above. Faint dashed: the other network, for comparison.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Try this:</strong> press Play with the <em>recurrent</em> network. In the
+        high-level RDM, a dark block of faces slowly appears and grows, and in the map the
+        faces drift together. Later still, the animate–inanimate division shows up in the
+        <em>intermediate</em> layer, fed back from above by top-down connections. The match
+        plot shows the network following the brain in the intermediate and high-level
+        regions. Now switch to <em>feedforward</em> and play again: once activity arrives,
+        every RDM freezes and the map stops moving. It matches the early region just as well,
+        but it cannot follow the changing geometry further up, which is the problem
+        Kietzmann and colleagues found.
+      </div>
+
+      <h2>Training networks to reproduce the brain's movie</h2>
+      <p>
+        The demo uses networks with hand-set weights. The paper went further: it trained
+        networks so that their RDM movies match the MEG ones, a method called
+        <strong>dynamic representational distance learning</strong> (dRDL). Each network
+        layer was assigned to one brain region, and the training objective rewarded
+        matching that region's RDM at every time step (10 ms per step), plus a small
+        object-recognition objective. To prevent the networks from simply memorising the
+        92 test images, they were trained on 141,000 other images and then tested on the
+        original stimuli.
+      </p>
+      <p>
+        The comparison was carefully controlled. Recurrent networks (with lateral and top-down
+        connections) were compared with <em>ramping</em> feedforward networks, which were
+        allowed self-connections so their units could build up activity over time, and which
+        had a similar number of parameters. The recurrent networks won clearly. For example,
+        they followed the average pattern distance over time almost perfectly (correlations
+        with held-out data of 0.95, 0.93 and 0.97 for V1–3, V4t/LO and IT/PHC, against 0.83,
+        0.59 and 0.47 for feedforward). They also matched the RDMs frame by frame better,
+        predicted fMRI data from the same people better, and even recognised objects more
+        accurately (about 74% against 64% correct).
+      </p>
+      <p>
+        Finally, the authors performed "virtual cooling": switching off lateral or top-down
+        connections in trained networks, in the way cooling a brain area temporarily silences
+        it. Both kinds of connection mattered, for recognition and for matching the brain.
+      </p>
+
+      <h2>What this does, and does not, show</h2>
+      <p>
+        Matching a brain's RDM movie is strong evidence that a model captures something real,
+        but it is not proof that the brain computes the same way. Different mechanisms can
+        produce similar RDMs, which is why the comparison against a well-matched control
+        (ramping feedforward networks with similar parameter counts) is essential. Other good
+        checks are testing on images the model never saw, testing whether results depend on
+        how model time steps are aligned with milliseconds, and asking whether the model also
+        predicts other data, as the paper did with fMRI.
+      </p>
+
+      <h2>Try it in Python</h2>
+      <p>A tiny recurrent layer with a fixed input already produces an RDM movie (PyTorch):</p>
+<pre><code>import torch
+
+torch.manual_seed(0)
+n_images, n_inputs, n_units, n_steps = 12, 16, 40, 20
+x = torch.randn(n_images, n_inputs)                 # a fixed "image" for each stimulus
+W_in = torch.randn(n_units, n_inputs) / n_inputs**0.5
+W_rec = torch.randn(n_units, n_units) * 0.15        # lateral (recurrent) weights
+
+def rdm(h):
+    """1 - correlation between the patterns of every pair of stimuli."""
+    return 1 - torch.corrcoef(h)
+
+h = torch.zeros(n_images, n_units)
+movie = []
+for t in range(n_steps):                            # the input never changes...
+    h = h + 0.3 * (-h + torch.relu(x @ W_in.T + h @ W_rec.T))
+    movie.append(rdm(h))                            # ...but the RDM does
+
+upper = torch.triu_indices(n_images, n_images, 1)
+change = [torch.corrcoef(torch.stack([movie[t][upper[0], upper[1]],
+                                      movie[-1][upper[0], upper[1]]]))[0, 1].item()
+          for t in range(1, n_steps, 4)]
+print([round(c, 2) for c in change])                # similarity of each frame to the last one
+
+# The idea behind dRDL: a loss that rewards matching a target RDM movie
+def rdm_loss(model_movie, brain_movie):
+    loss = 0
+    for M, B in zip(model_movie, brain_movie):
+        m, b = M[upper[0], upper[1]], B[upper[0], upper[1]]
+        loss = loss + 1 - torch.corrcoef(torch.stack([m, b]))[0, 1]
+    return loss / len(model_movie)                  # minimise with backpropagation through time</code></pre>
+
+      <h2>Why this matters for EEG</h2>
+      <p>
+        This study is MEG, but the same analysis works with EEG: compute an RDM from the
+        pattern across electrodes (or across reconstructed sources) at every time point, and
+        you get an RDM movie of your own experiment. Its strength is time: EEG and MEG show
+        <em>when</em> each representational distinction appears, and that timing is what
+        reveals recurrent processing that a single snapshot, or a slow method like fMRI,
+        would miss. Combined with models trained on brain data, it turns EEG from a
+        description of brain activity into a test of how the brain computes.
+      </p>
+      <p class="post-meta" style="margin-top:24px">
+        Note: in the demo, the "brain" RDM movies are simulated from three components (low-level
+        features, faces, animacy) whose strengths rise and fall over time following the
+        qualitative pattern described in the paper; they are not the paper's data. The networks
+        have three layers of 40 units with fixed, hand-set weights rather than trained ones; the
+        recurrent circuitry is written in a simplified form (slowly self-amplifying category
+        signals in the top layer, and top-down feedback into the middle layer).
+      </p>
+    </article>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script>
+  (() => {
+    function mulberry32(a) {
+      return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    }
+    const rand = mulberry32(2019);
+    const randn = () => Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());
+    const mat = (r, c, s = 1) => Array.from({ length: r }, () => Array.from({ length: c }, () => s * randn()));
+
+    // ---------- Stimuli ----------
+    const STIM = [["👩", 0], ["🧔", 0], ["👶", 0], ["🐕", 1], ["🐎", 1], ["🐦", 1],
+                  ["🍎", 2], ["🌵", 2], ["🍄", 2], ["🔨", 3], ["🔑", 3], ["🎸", 3]];
+    const CAT_COLORS = ["#ff7a8a", "#ffd678", "#5ee6c8", "#8b6cff"];
+    const S = STIM.length, D = 16, H = 40, T = 30;   // 30 steps of 10 ms = 0–290 ms
+    const cat = STIM.map((s) => s[1]);
+    const isFace = cat.map((c) => +(c === 0)), isAnimate = cat.map((c) => +(c <= 1));
+
+    // ---------- Linear algebra helpers ----------
+    const matvec = (M, v) => M.map((row) => row.reduce((s, w, j) => s + w * v[j], 0));
+    const relu = (v) => v.map((a) => (a > 0 ? a : 0));
+    function pearson(a, b) {
+      const n = a.length, ma = a.reduce((s, v) => s + v, 0) / n, mb = b.reduce((s, v) => s + v, 0) / n;
+      let ab = 0, aa = 0, bb = 0;
+      for (let i = 0; i < n; i++) { const x = a[i] - ma, y = b[i] - mb; ab += x * y; aa += x * x; bb += y * y; }
+      return aa && bb ? ab / Math.sqrt(aa * bb) : 0;
+    }
+    const rdmOf = (P) => P.map((a) => P.map((b) => 1 - pearson(a, b)));
+    const upper = (M) => { const o = []; for (let i = 0; i < S; i++) for (let j = i + 1; j < S; j++) o.push(M[i][j]); return o; };
+    function ranks(x) {
+      const idx = x.map((v, i) => [v, i]).sort((a, b) => a[0] - b[0]), r = new Array(x.length);
+      for (let i = 0; i < idx.length;) { let j = i; while (j + 1 < idx.length && idx[j + 1][0] === idx[i][0]) j++;
+        for (let k = i; k <= j; k++) r[idx[k][1]] = (i + j) / 2; i = j + 1; }
+      return r;
+    }
+    const spearman = (a, b) => pearson(ranks(a), ranks(b));
+
+    // ---------- The image input: low-level features plus a weak category signal ----------
+    const low = mat(S, D), catDir = mat(4, D), aniDir = mat(1, D)[0];
+    const x = low.map((f, i) => f.map((v, k) => v + 0.25 * catDir[cat[i]][k] + 0.25 * (2 * isAnimate[i] - 1) * aniDir[k]));
+    const W1 = mat(H, D, 1 / Math.sqrt(D)), W2 = mat(H, H, 1 / Math.sqrt(H)), W3 = mat(H, H, 1 / Math.sqrt(H));
+
+    // Recurrent circuitry, written in a reduced, readable form:
+    //  * lateral recurrence in layer 3 builds slow "face" and "animate" signals for each stimulus.
+    //    They start from the weak category evidence in the feedforward input and amplify
+    //    themselves (an attractor), so categories separate gradually over time;
+    //  * top-down connections feed the slowly built animacy signal back into layer 2.
+    const ff3 = x.map((xi) => relu(matvec(W3, relu(matvec(W2, relu(matvec(W1, xi)))))));
+    const avg = (rows) => rows[0].map((_, k) => rows.reduce((s, r) => s + r[k], 0) / rows.length);
+    const evidence = (labels) => {            // projection on the direction separating the two groups
+      const d = avg(ff3.filter((_, i) => labels[i])).map((v, k) => v - avg(ff3.filter((_, i) => !labels[i]))[k]);
+      const e = ff3.map((v) => v.reduce((s, a, k) => s + a * d[k], 0));
+      const m = e.reduce((s, v) => s + v, 0) / S, sd = Math.sqrt(e.reduce((s, v) => s + (v - m) ** 2, 0) / S) || 1;
+      return e.map((v) => (v - m) / sd);
+    };
+    const eFace = evidence(isFace), eAnim = evidence(isAnimate);
+    // Zero-mean directions, so they change the shape of a pattern, not just its overall level.
+    const dirVec = () => { const v = Array.from({ length: H }, randn), m = v.reduce((a, b) => a + b, 0) / H; return v.map((a) => a - m); };
+    const pFace = dirVec(), pAnim = dirVec(), pAnimTD = dirVec();
+    const norm = (v) => Math.hypot(...v);
+    const scale = ff3.reduce((s, v) => s + norm(v), 0) / S / norm(pFace);
+
+    function simulate(recurrent) {
+      const alpha = 0.25;
+      let h1 = x.map(() => new Array(H).fill(0)), h2 = h1.map((r) => r.slice()), h3 = h1.map((r) => r.slice());
+      const sFace = new Array(S).fill(0), sAnim = new Array(S).fill(0), sTD = new Array(S).fill(0);
+      const frames = [];
+      for (let t = 0; t < T; t++) {
+        if (recurrent && t >= 5) for (let i = 0; i < S; i++) {
+          sFace[i] += 0.07 * (-sFace[i] + Math.tanh(0.5 * eFace[i] + 1.6 * sFace[i]));   // faces first
+          sAnim[i] += 0.05 * (-sAnim[i] + Math.tanh(0.5 * eAnim[i] + 1.6 * sAnim[i]));   // animacy a little later
+          sTD[i] += 0.07 * (-sTD[i] + sAnim[i]);                                          // top-down arrives later still
+        }
+        const n1 = [], n2 = [], n3 = [];
+        for (let i = 0; i < S; i++) {
+          const d1 = relu(matvec(W1, x[i]));
+          const d2 = relu(matvec(W2, h1[i]).map((v, k) => v + (recurrent ? 4.0 * scale * sTD[i] * pAnimTD[k] : 0)));
+          const d3 = relu(matvec(W3, h2[i]).map((v, k) => v +
+            (recurrent ? scale * (1.6 * sFace[i] * pFace[k] + 1.2 * sAnim[i] * pAnim[k]) : 0)));
+          n1.push(h1[i].map((v, k) => v + alpha * (d1[k] - v)));
+          n2.push(h2[i].map((v, k) => v + alpha * (d2[k] - v)));
+          n3.push(h3[i].map((v, k) => v + alpha * (d3[k] - v)));
+        }
+        h1 = n1; h2 = n2; h3 = n3;
+        frames.push({ states: [h1, h2, h3], rdms: [h1, h2, h3].map(rdmOf) });
+      }
+      return frames;
+    }
+    const NET = { rec: simulate(true), ff: simulate(false) };
+
+    // ---------- Simulated brain RDM movies ----------
+    // Each region's RDM = sum of component RDMs (low-level, face, animacy) whose weights rise and fall
+    // over time, following the qualitative pattern reported in the paper, plus measurement noise.
+    // Low-level geometry of each region = the image-driven (feedforward) geometry of that processing stage.
+    const lowRDMs = [0, 1, 2].map((r) => NET.ff[T - 1].rdms[r]);
+    const catRDM = (v) => v.map((a) => v.map((b) => (a === b ? 0 : 1)));
+    const faceRDM = catRDM(isFace), animRDM = catRDM(isAnimate);
+    const bump = (t, peak, width, h) => h * Math.exp(-((t - peak) ** 2) / (2 * width * width));
+    const onset = (t) => 1 / (1 + Math.exp(-(t - 55) / 8));   // nothing before ~50 ms
+    const WEIGHTS = [
+      (t) => [onset(t) * (0.5 + bump(t, 100, 25, 0.9)), bump(t, 130, 25, 0.25), 0],                          // V1–3
+      (t) => [onset(t) * (0.25 + bump(t, 100, 25, 0.5)), bump(t, 140, 35, 0.6), bump(t, 260, 40, 0.8)],       // V4t/LO
+      (t) => [onset(t) * (0.1 + bump(t, 100, 20, 0.4)), bump(t, 130, 30, 1.0) + bump(t, 230, 60, 0.4),
+              bump(t, 140, 20, 0.8) + bump(t, 270, 40, 0.4)],                                                 // IT/PHC
+    ];
+    const noise = Array.from({ length: 3 }, () => Array.from({ length: T }, () => {
+      const N = mat(S, S, 0.25); return N.map((r, i) => r.map((v, j) => (i === j ? 0 : (v + N[j][i]) / 2)));
+    }));
+    const BRAIN = [0, 1, 2].map((r) => Array.from({ length: T }, (_, t) => {
+      const [wl, wf, wa] = WEIGHTS[r](t * 10);
+      return lowRDMs[r].map((row, i) => row.map((v, j) => (i === j ? 0 :
+        1 + wl * (v - 1) + wf * (faceRDM[i][j] - 0.5) + wa * (animRDM[i][j] - 0.5) + noise[r][t][i][j])));
+    }));
+
+    // Frame-by-frame match (Spearman) between each layer and its region.
+    const MATCH = {};
+    for (const m of ["rec", "ff"]) MATCH[m] = [0, 1, 2].map((r) => NET[m].map((f, t) => {
+      const a = upper(f.rdms[r]); return a.every((v) => v === a[0]) ? NaN : spearman(a, upper(BRAIN[r][t]));
+    }));
+
+    // ---------- Drawing ----------
+    const stops = [[18, 15, 34], [90, 50, 190], [255, 122, 138], [255, 220, 130]];
+    const heat = (u) => { u = Math.max(0, Math.min(1, u)) * 3; const i = Math.min(2, Math.floor(u)), f = u - i;
+      return stops[i].map((c, k) => Math.round(c + (stops[i + 1][k] - c) * f)); };
+    function drawRDM(canvas, M) {
+      const ctx = canvas.getContext("2d"), img = ctx.createImageData(S, S);
+      const vals = upper(M), flat = vals.every((v) => v === vals[0]);
+      const sorted = vals.slice().sort((a, b) => a - b);
+      const pct = (v) => { let lo = 0, hi = sorted.length; while (lo < hi) { const m = (lo + hi) >> 1; sorted[m] < v ? (lo = m + 1) : (hi = m); } return lo / sorted.length; };
+      for (let i = 0; i < S; i++) for (let j = 0; j < S; j++) {
+        const c = i === j || flat ? stops[0] : heat(pct(M[i][j]));
+        img.data.set([...c, 255], 4 * (i * S + j));
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+    function fit(canvas) {
+      canvas.dataset.h ||= canvas.getAttribute("height");
+      const dpr = window.devicePixelRatio || 1, W = canvas.clientWidth, Hh = Number(canvas.dataset.h);
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(Hh * dpr); canvas.style.height = Hh + "px";
+      const ctx = canvas.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { ctx, W, H: Hh };
+    }
+
+    // PCA of layer-3 states (all frames) for the trajectory map.
+    function pcaProjection(frames) {
+      const rows = []; frames.forEach((f) => f.states[2].forEach((v) => rows.push(v)));
+      const mean = rows[0].map((_, k) => rows.reduce((s, r) => s + r[k], 0) / rows.length);
+      const X = rows.map((r) => r.map((v, k) => v - mean[k]));
+      const C = mean.map((_, a) => mean.map((__, b) => X.reduce((s, r) => s + r[a] * r[b], 0)));
+      const comps = [];
+      for (let c = 0; c < 2; c++) {
+        let v = mean.map((_, k) => Math.sin(k + c + 1));
+        for (let it = 0; it < 200; it++) {
+          let w = matvec(C, v); comps.forEach((u) => { const d = w.reduce((s, x, k) => s + x * u[k], 0); w = w.map((x, k) => x - d * u[k]); });
+          const n = Math.hypot(...w) || 1; v = w.map((x) => x / n);
+        }
+        comps.push(v);
+      }
+      return frames.map((f) => f.states[2].map((s) => comps.map((u) => s.reduce((acc, x, k) => acc + (x - mean[k]) * u[k], 0))));
+    }
+    const PROJ = { rec: pcaProjection(NET.rec), ff: pcaProjection(NET.ff) };
+
+    const model = () => document.querySelector('input[name="model"]:checked').value;
+    const timeIn = document.getElementById("time");
+
+    function drawTrajectory(t) {
+      const { ctx, W, H: Hh } = fit(document.getElementById("traj"));
+      ctx.clearRect(0, 0, W, Hh);
+      const P = PROJ[model()], all = P.flat();
+      const xs = all.map((p) => p[0]), ys = all.map((p) => p[1]);
+      const sx = (W - 50) / ((Math.max(...xs) - Math.min(...xs)) || 1), sy = (Hh - 50) / ((Math.max(...ys) - Math.min(...ys)) || 1);
+      const X = (v) => 25 + (v - Math.min(...xs)) * sx, Y = (v) => 25 + (v - Math.min(...ys)) * sy;
+      for (let i = 0; i < S; i++) {
+        ctx.strokeStyle = CAT_COLORS[cat[i]]; ctx.globalAlpha = 0.45; ctx.lineWidth = 1.5; ctx.beginPath();
+        for (let k = 1; k <= t; k++) (k === 1 ? ctx.moveTo : ctx.lineTo).call(ctx, X(P[k][i][0]), Y(P[k][i][1]));
+        ctx.stroke(); ctx.globalAlpha = 1;
+      }
+      for (let i = 0; i < S; i++) {
+        const [px, py] = [X(P[t][i][0]), Y(P[t][i][1])];
+        ctx.beginPath(); ctx.arc(px, py, 13, 0, 2 * Math.PI); ctx.fillStyle = "#1b1631"; ctx.fill();
+        ctx.lineWidth = 2.5; ctx.strokeStyle = CAT_COLORS[cat[i]]; ctx.stroke();
+        ctx.font = "14px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(STIM[i][0], px, py + 1);
+      }
+    }
+
+    function drawMatchPlot(t) {
+      const { ctx, W, H: Hh } = fit(document.getElementById("matchplot"));
+      ctx.clearRect(0, 0, W, Hh);
+      const pad = { l: 34, r: 10, t: 12, b: 28 };
+      const X = (k) => pad.l + (k / (T - 1)) * (W - pad.l - pad.r), Y = (v) => Hh - pad.b - ((v + 0.2) / 1.2) * (Hh - pad.t - pad.b);
+      ctx.strokeStyle = "rgba(255,255,255,0.1)"; ctx.fillStyle = "#8e86b3"; ctx.font = "11px Source Sans 3, sans-serif";
+      [0, 0.5, 1].forEach((v) => { ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(W - pad.r, Y(v)); ctx.stroke(); ctx.fillText(v.toFixed(1), 6, Y(v) + 4); });
+      [0, 100, 200, 290].forEach((ms) => ctx.fillText(ms + " ms", X(ms / 10) - 12, Hh - 8));
+      const cols = ["#cfc8ef", "#5ee6c8", "#ff7a8a"], names = ["V1–3", "V4t/LO", "IT/PHC"];
+      const line = (vals, color, dashed, width) => {
+        ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dashed ? [4, 4] : []); ctx.beginPath();
+        let on = false; vals.forEach((v, k) => { if (isNaN(v)) { on = false; return; } on ? ctx.lineTo(X(k), Y(v)) : ctx.moveTo(X(k), Y(v)); on = true; });
+        ctx.stroke(); ctx.setLineDash([]);
+      };
+      const other = model() === "rec" ? "ff" : "rec";
+      [0, 1, 2].forEach((r) => { ctx.globalAlpha = 0.35; line(MATCH[other][r], cols[r], true, 1.2); ctx.globalAlpha = 1; line(MATCH[model()][r], cols[r], false, 2.2); });
+      ctx.strokeStyle = "#ffd678"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(X(t), pad.t); ctx.lineTo(X(t), Hh - pad.b); ctx.stroke();
+      names.forEach((n, r) => { ctx.fillStyle = cols[r]; ctx.fillRect(W - 170 + r * 56, pad.t, 10, 3); ctx.fillText(n, W - 157 + r * 56, pad.t + 5); });
+    }
+
+    function draw() {
+      const t = Number(timeIn.value), f = NET[model()][t];
+      document.getElementById("timeval").textContent = t * 10 + " ms";
+      [0, 1, 2].forEach((r) => {
+        drawRDM(document.getElementById("n" + r), f.rdms[r]);
+        drawRDM(document.getElementById("b" + r), BRAIN[r][t]);
+        const v = MATCH[model()][r][t];
+        document.getElementById("m" + r).textContent = isNaN(v) ? "no activity yet" : "ρ = " + v.toFixed(2);
+      });
+      drawTrajectory(t);
+      drawMatchPlot(t);
+    }
+
+    // Stimulus legend
+    const row = document.getElementById("stimRow");
+    STIM.forEach(([e, c]) => { const b = document.createElement("button"); b.textContent = e; b.disabled = true;
+      b.style.borderColor = CAT_COLORS[c]; b.style.cursor = "default"; row.appendChild(b); });
+
+    let timer = null;
+    const playBtn = document.getElementById("play");
+    const stop = () => { clearInterval(timer); timer = null; playBtn.textContent = "▶ Play"; };
+    playBtn.addEventListener("click", () => {
+      if (timer) return stop();
+      if (Number(timeIn.value) >= T - 1) timeIn.value = 0;
+      playBtn.textContent = "❚❚ Pause";
+      timer = setInterval(() => {
+        const t = Number(timeIn.value) + 1;
+        if (t > T - 1) return stop();
+        timeIn.value = t; draw();
+      }, 260);
+    });
+    timeIn.addEventListener("input", () => { stop(); draw(); });
+    document.querySelectorAll('input[name="model"]').forEach((r) => r.addEventListener("change", draw));
+    window.addEventListener("resize", draw);
+    timeIn.value = 13; draw();
+    window.__rec = { MATCH, NET, BRAIN, upper, spearman };
+  })();
+  </script>
+</body>
+</html>

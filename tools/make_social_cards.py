@@ -123,6 +123,22 @@ def draw_rdm(ax):
     ax.imshow(1 - np.corrcoef(X), cmap=GLOW, interpolation="nearest")
 
 
+def draw_recurrence(ax):
+    """Three frames of an RDM movie: a face/animal block emerging over time."""
+    rng = np.random.default_rng(9)
+    cat = np.repeat([0, 1, 2, 3], 3)
+    proto = rng.standard_normal(40)
+    base = rng.standard_normal((12, 40))
+    frames = []
+    for k in (0.0, 0.6, 1.3, 2.4):
+        X = base + k * np.outer((cat == 0) + 0.5 * (cat == 1), proto)
+        frames.append(1 - np.corrcoef(X))
+    g = np.full((12, 1), np.nan)
+    top = np.hstack([frames[0], g, frames[1]]); bottom = np.hstack([frames[2], g, frames[3]])
+    cmap = GLOW.copy(); cmap.set_bad("#fdfaf5")          # light gaps between the movie frames
+    ax.imshow(np.vstack([top, np.full((1, 25), np.nan), bottom]), cmap=cmap, interpolation="nearest")
+
+
 def draw_portrait(ax):
     img = plt.imread(SITE / "assets/img/profile.jpg")
     h, w = img.shape[:2]
@@ -184,7 +200,8 @@ if __name__ == "__main__":
     card("note-linear-nonlinear.png", "Linear or nonlinear? Solving equations in the brain", "Lab Note", draw_linear)
     card("note-receptive-fields.png", "Receptive fields: reading an image from the brain", "Lab Note", draw_rf)
     card("note-rsa.png", "Representational similarity analysis", "Lab Note", draw_rdm)
-    for name, draw in [("synchrony", draw_synchrony), ("visual-hierarchy", draw_hierarchy),
+    card("note-recurrence.png", "Why the brain needs recurrence", "Lab Note", draw_recurrence)
+    for name, draw in [("recurrence", draw_recurrence), ("synchrony", draw_synchrony), ("visual-hierarchy", draw_hierarchy),
                        ("linear-nonlinear", draw_linear), ("receptive-fields", draw_rf),
                        ("rsa", draw_rdm), ("atlas", draw_atlas)]:
         thumb(f"{name}.jpg", draw)
